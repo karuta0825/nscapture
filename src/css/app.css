@@ -1,0 +1,49 @@
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#wrapper  {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+#thumbnails {
+  min-width: 250px;
+  height: 100%;
+  background: #f7f7f7;
+}
+
+#thumbnails__ul {
+  list-style: none;
+  padding:0;
+}
+
+.thumbnails__item {
+  text-align: center;
+  margin:10px;
+}
+
+.thumbnails__item__img {
+  width:100px;
+}
+
+.thumbnails__item__name {
+  overflow: auto;
+  width:150px;
+}
+
+#capture {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#capture__video {
+  width: 100%;
+}
