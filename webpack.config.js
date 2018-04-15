@@ -47,7 +47,7 @@ const config = [
       {
         test: /\.css$/,
         exclude: path.resolve(__dirname, 'node_modules'),
-        loader: ['style-loader', 'css-loader?modules']
+        loader: ['style-loader', 'css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]']
       }
       ]
     }

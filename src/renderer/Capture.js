@@ -8,9 +8,9 @@ export default class Capture extends Component {
 
   showSvg(isRecord) {
     if (isRecord) {
-       return <FiberManualRecord id={styles.capture__action_svg_record} />
+       return <FiberManualRecord className={styles.capture__action_svg_record} />
     }
-    return <Stop id={styles.capture__action_svg_stop} />
+    return <Stop className={styles.capture__action_svg_stop} />
   }
 
   render() {

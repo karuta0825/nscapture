@@ -5,7 +5,7 @@ html, body {
   margin: 0;
 }
 
-#wrapper  {
+#wrapper {
   display: flex;
   width: 100%;
   height: 100%;
@@ -55,14 +55,17 @@ html, body {
   height: 20vmax;
 }
 
-#capture__action_svg_record {
-  font-size: 20vmax;
+.capture__action_svg {
+  font-size: 20vmax !important;
   opacity:0.8;
+}
+
+.capture__action_svg_record {
+  composes: capture__action_svg;
   color: #f50057;
 }
 
-#capture__action_svg_stop {
-  font-size: 20vmax;
-  opacity:0.8;
+.capture__action_svg_stop {
+  composes: capture__action_svg;
   color: #472dff;
 }
