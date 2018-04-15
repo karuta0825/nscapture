@@ -48,10 +48,12 @@ export default class Manager extends Component {
   }
 
   setRecorder(stream) {
+    const {chunks} = this.state;
     const options = {mimeType: 'video/webm'};
     const recorder = new MediaRecorder(stream, options);
     recorder.ondataavailable = (e) => {
-      this.state.chunks.push(e.data);
+      chunks.push(e.data);
+      this.setState({chunks:chunks});
     };
     this.setState({
       stream: stream,
@@ -85,11 +87,11 @@ export default class Manager extends Component {
   }
 
   render() {
-    const {thumbnails, stream, recorder} = this.state;
+    const {thumbnails, stream, recorder, isRecord} = this.state;
     return (
       <div id={styles.wrapper}>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail}/>
-        <Capture stream={stream} onClick={this.recoreOrStop}/>
+        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord}/>
       </div>
     );
   }
