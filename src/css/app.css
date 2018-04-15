@@ -42,8 +42,27 @@ html, body {
   height: 100%;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 #capture__video {
-  width: 100%;
+  width: 90%;
+}
+
+#capture__action {
+  position: absolute;
+  width: 20vmax;
+  height: 20vmax;
+}
+
+#capture__action_svg_record {
+  font-size: 20vmax;
+  opacity:0.8;
+  color: #f50057;
+}
+
+#capture__action_svg_stop {
+  font-size: 20vmax;
+  opacity:0.8;
+  color: #472dff;
 }
