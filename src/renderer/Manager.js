@@ -24,7 +24,7 @@ export default class Manager extends Component {
     ipc.on('saved-file', (e,path) => {
       const reader = new FileReader()
       reader.onload = () => {
-        const buffer = new Buffer(reader.result)
+        const buffer = Buffer.from(reader.result)
         fs.writeFileSync(path, buffer);
       }
       reader.readAsArrayBuffer(this.state.chunks[0]);
