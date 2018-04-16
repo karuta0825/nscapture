@@ -12,6 +12,7 @@ html, body {
 }
 
 #thumbnails {
+  overflow-y: scroll;
   min-width: 250px;
   height: 100%;
   background: #424242;
