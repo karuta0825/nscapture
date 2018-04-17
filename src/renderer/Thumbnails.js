@@ -6,6 +6,13 @@ import { ListItem, ListItemText } from 'material-ui/List';
 
 export default class Thumbnails extends Component {
 
+  setCharlength(windowName) {
+    if (windowName.length > 30) {
+      return windowName.substr(0,30)
+    }
+    return windowName;
+  }
+
   render() {
     const {imgs, selectThumbnail} = this.props
     return (
@@ -17,7 +24,7 @@ export default class Thumbnails extends Component {
               <ListItem className={styles.thumbnails__item} button onClick={() => { selectThumbnail(item)}}>
                 <img className={styles.thumbnails__item__img} src={item.thumbnail.toDataURL()} />
                 <div className={styles.thumbnails__item__name}>
-                  <Typography variant='body2'>{item.name}</Typography>
+                  <Typography variant='body2'>{this.setCharlength(item.name)}</Typography>
                 </div>
               </ListItem>
             )
