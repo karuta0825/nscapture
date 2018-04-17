@@ -40,6 +40,7 @@ export default class Manager extends Component {
     })
     .then((stream) => {
       this.setRecorder(stream);
+      this.setState({stream: stream, isRecord: true});
     })
   }
 
@@ -47,7 +48,7 @@ export default class Manager extends Component {
     ipc.removeAllListeners('saved-file');
   }
 
-  setRecorder(stream) {
+  setRecorder(stream = this.state.stream) {
     const {chunks} = this.state;
     const options = {mimeType: 'video/webm'};
     const recorder = new MediaRecorder(stream, options);
@@ -55,12 +56,7 @@ export default class Manager extends Component {
       chunks.push(e.data);
       this.setState({chunks:chunks});
     };
-    this.setState({
-      stream: stream,
-      recorder: recorder,
-      chunks : [],
-      isRecord: true,
-    });
+    this.setState({recorder: recorder, chunks: []});
   }
 
   selectThumbnail(item) {
@@ -68,9 +64,11 @@ export default class Manager extends Component {
     this.dc.getStream(windowId)
       .then((stream) => {
         this.setRecorder(stream);
+        this.setState({stream: stream, isRecord: true});
       });
   }
 
+  // 同じ関数内で複数setStateしているのが気持ち悪いのか、一回で済ませるほうがいい?
   recoreOrStop() {
     const {recorder, chunks, isRecord} = this.state;
 
@@ -80,6 +78,7 @@ export default class Manager extends Component {
     }
     else {
       recorder.stop();
+      this.setRecorder();
       ipc.send('save-dialog');
     }
 
@@ -87,7 +86,7 @@ export default class Manager extends Component {
   }
 
   render() {
-    const {thumbnails, stream, recorder, isRecord} = this.state;
+    const {thumbnails, stream, isRecord} = this.state;
     return (
       <div id={styles.wrapper}>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail}/>
