@@ -11,7 +11,7 @@ export default class DesktopCapturer {
   getSources() {
     return new Promise((res,rej) => {
       desktopCapturer.getSources(
-        {types: ['window', 'screen']},
+        {types: ['window', 'screen'], thumbnailSize: {width:50, height:50}},
         (err, sources) => {
         if (err) {rej(err);}
         res(sources)

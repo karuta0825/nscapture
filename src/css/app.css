@@ -29,12 +29,13 @@ html, body {
 }
 
 .thumbnails__item__img {
-  width:100px;
+  border-radius: 2px;
 }
 
 .thumbnails__item__name {
   overflow: auto;
   width:150px;
+  padding-left: 10px;
 }
 
 #capture {
