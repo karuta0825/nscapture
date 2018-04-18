@@ -3,3 +3,4 @@
 /dist/renderer/renderer.js
 /dist/renderer/renderer.js.map
 /src/tmp
+package-lock.json

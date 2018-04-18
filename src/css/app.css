@@ -11,6 +11,20 @@ html, body {
   height: 100%;
 }
 
+#menu {
+  width: 60px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.menu_title {
+  position: absolute;
+  bottom:0px;
+  font-size: 10px;
+}
+
 #thumbnails {
   overflow-y: scroll;
   min-width: 250px;
@@ -28,7 +42,9 @@ html, body {
   margin:10px;
 }
 
-.thumbnails__item__img {
+.thumbnails__item__imgBox {
+  width: 50px;
+  height: 50px;
   border-radius: 2px;
 }
 

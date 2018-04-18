@@ -5,6 +5,10 @@ import DesktopCapture from './DesktopCapture';
 import Capture from './Capture';
 import { ipcRenderer as ipc} from 'electron';
 import fs from 'fs';
+import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 
 export default class Manager extends Component {
@@ -89,6 +93,16 @@ export default class Manager extends Component {
     const {thumbnails, stream, isRecord} = this.state;
     return (
       <div id={styles.wrapper}>
+        <div id={styles.menu}>
+          <IconButton color="primary" component="span">
+            <PhotoCamera />
+            <div className={styles.menu_title}>title</div>
+          </IconButton>
+          <IconButton color="primary" aria-label="Add to shopping cart">
+            <AddShoppingCartIcon />
+            <div className={styles.menu_title}>title</div>
+          </IconButton>          
+        </div>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail}/>
         <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord}/>
       </div>
