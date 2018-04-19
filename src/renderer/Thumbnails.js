@@ -22,12 +22,12 @@ export default class Thumbnails extends Component {
           {
             imgs.map((item,idx) => {
               return (
-                <Paper className={styles.thumbnails__item} elevation={1} onClick={() => { selectThumbnail(item)}}>
+                <div className={styles.thumbnails__item} onClick={() => { selectThumbnail(item)}}>
                   <img className={styles.thumbnails__item__img} src={item.thumbnail.toDataURL()} />
                   <div className={styles.thumbnails__item__name}>
                     <Typography variant='body2'>{this.setCharlength(item.name)}</Typography>
-                  </div>                
-                </Paper>
+                  </div>
+                </div>
               );
             })
           }

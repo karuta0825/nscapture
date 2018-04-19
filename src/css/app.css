@@ -12,12 +12,13 @@ html, body {
 }
 
 #menu {
-  width: 60px;
+  width: 50px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: gray;
+  align-items: center;
+  background: #3d423f;
 }
 
 .menu_title {
@@ -28,9 +29,9 @@ html, body {
 
 #thumbnails {
   overflow-y: scroll;
-  min-width: 250px;
+  width: 250px;
   height: 100%;
-  background: #e1e1e1;
+  background: #efefef;
 }
 
 #thumbnails__ul {
@@ -43,11 +44,15 @@ html, body {
   margin:10px;
   min-height: 70px;
   align-items: center;
+  border-radius: 3px;
+  border: 0.1px solid #cbcccb;
+  background: #fff;
+
 }
 
 .thumbnails__item__img {
   border-radius: 5px;
-  margin-left: 7px;
+  margin-left: 10px;
 }
 
 .thumbnails__item__name {
@@ -58,7 +63,7 @@ html, body {
 
 #capture {
   display: flex;
-  width: 100%;
+  flex:1;
   height: 100%;
   align-items: center;
   justify-content: center;
