@@ -26,6 +26,7 @@ export default class Manager extends Component {
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recoreOrStop = this.recoreOrStop.bind(this);
+    this.refreshWindow = this.refreshWindow.bind(this);
     this.setTimer = this.setTimer.bind(this);
     this.clearTimer = this.clearTimer.bind(this);
 
@@ -41,15 +42,7 @@ export default class Manager extends Component {
   }
 
   componentWillMount() {
-    this.dc.getSources()
-    .then((list) => {
-      this.setState({thumbnails:list})
-      return this.dc.getStream(list[0].id)
-    })
-    .then((stream) => {
-      this.setRecorder(stream);
-      this.setState({stream: stream, isRecord: true});
-    })
+    this.refreshWindow();
   }
 
   componentWillUnmount() {
@@ -77,7 +70,18 @@ export default class Manager extends Component {
       });
   }
 
-  // 同じ関数内で複数setStateしているのが気持ち悪いのか、一回で済ませるほうがいい?
+  refreshWindow() {
+    this.dc.getSources()
+    .then((list) => {
+      this.setState({thumbnails:list})
+      return this.dc.getStream(list[0].id)
+    })
+    .then((stream) => {
+      this.setRecorder(stream);
+      this.setState({stream: stream, isRecord: true});
+    })
+  }
+
   recoreOrStop() {
     const {recorder, chunks, isRecord} = this.state;
 
@@ -123,7 +127,7 @@ export default class Manager extends Component {
             <div className={styles.menu_title}>title</div>
           </IconButton>          
         </div>
-        <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail}/>
+        <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
         <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} time={time}/>
       </div>
     );
