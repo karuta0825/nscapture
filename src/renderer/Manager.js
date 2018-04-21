@@ -24,6 +24,7 @@ export default class Manager extends Component {
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recoreOrStop = this.recoreOrStop.bind(this);
+    this.refreshWindow = this.refreshWindow.bind(this);
 
     ipc.on('saved-file', (e,path) => {
       const reader = new FileReader()
@@ -37,15 +38,7 @@ export default class Manager extends Component {
   }
 
   componentWillMount() {
-    this.dc.getSources()
-    .then((list) => {
-      this.setState({thumbnails:list})
-      return this.dc.getStream(list[0].id)
-    })
-    .then((stream) => {
-      this.setRecorder(stream);
-      this.setState({stream: stream, isRecord: true});
-    })
+    this.refreshWindow();
   }
 
   componentWillUnmount() {
@@ -61,6 +54,18 @@ export default class Manager extends Component {
       this.setState({chunks:chunks});
     };
     this.setState({recorder: recorder, chunks: []});
+  }
+
+  refreshWindow() {
+    this.dc.getSources()
+    .then((list) => {
+      this.setState({thumbnails:list})
+      return this.dc.getStream(list[0].id)
+    })
+    .then((stream) => {
+      this.setRecorder(stream);
+      this.setState({stream: stream, isRecord: true});
+    })
   }
 
   selectThumbnail(item) {
@@ -101,9 +106,9 @@ export default class Manager extends Component {
           <IconButton color="primary" aria-label="Add to shopping cart">
             <AddShoppingCartIcon />
             <div className={styles.menu_title}>title</div>
-          </IconButton>          
+          </IconButton>
         </div>
-        <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail}/>
+        <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
         <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord}/>
       </div>
     );

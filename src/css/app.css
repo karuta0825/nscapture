@@ -18,7 +18,7 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #3d423f;
+  background: #2b343c;
 }
 
 .menu_title {
@@ -27,25 +27,43 @@ html, body {
   font-size: 10px;
 }
 
-#thumbnails {
-  overflow-y: scroll;
+#capture_list {
   width: 250px;
   height: 100%;
-  background: #efefef;
+  background: #f0f1f1;
 }
 
-#thumbnails__ul {
-  list-style: none;
-  padding:0;
+.capture_list__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width :100%;
+  height: 45px;
+  background: #fafafa;
+  border-bottom:0.1px solid #e6e6e6;
+}
+
+.header__icon_update {
+  position: absolute !important;
+  right: 0px !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+#thumbnails {
+  overflow-y: scroll;
+  width: 100%;
+  height: calc( 100% - 45px );
+  border-right: 0.1px solid #e6e6e6;
 }
 
 .thumbnails__item {
   display: flex;
-  margin:10px;
+  margin:5px;
   min-height: 70px;
   align-items: center;
   border-radius: 3px;
-  border: 0.1px solid #cbcccb;
+  border: 0.1px solid #e6e6e6;
   background: #fff;
 
 }
@@ -62,35 +80,60 @@ html, body {
 }
 
 #capture {
-  display: flex;
   flex:1;
   height: 100%;
+  position: relative;
+}
+
+.capture__header {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  width:100%;
+  height: 45px;
+  background: #fafafa;
+  border-bottom: 0.1px solid #e6e6e6;
+  border-left: 0.1px solid #e6e6e6;
+}
+
+.capture__body {
+  height: calc( 100% - 45px - 50px);
+  display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
-#capture__video {
-  width: 90%;
+.capture__body__video {
+  width: 60vmax;
+  height: 50vmin;
 }
 
-#capture__action {
-  position: absolute;
-  width: 20vmax;
-  height: 20vmax;
+.capture__body__action {
+  position: absolute !important;
+  width: 20vmin !important;
+  height: 20vmin !important;
 }
 
-.capture__action_svg {
-  font-size: 20vmax !important;
+.capture__body__action_svg {
+  font-size: 20vmin !important;
   opacity:0.8;
 }
 
-.capture__action_svg_record {
-  composes: capture__action_svg;
+.capture__body__action_svg_record {
+  composes: capture__body__action_svg;
   color: #f50057;
 }
 
-.capture__action_svg_stop {
-  composes: capture__action_svg;
+.capture__body__action_svg_stop {
+  composes: capture__body__action_svg;
   color: #472dff;
+}
+
+.capture__footer {
+  height: 50px;
+  width: 100%;
+  background: #fafafa;
+  border-top: 0.1px solid #e6e6e6;
+  border-left: 0.1px solid #e6e6e6;
 }
