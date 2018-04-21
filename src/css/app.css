@@ -21,6 +21,10 @@ html, body {
   background: #2b343c;
 }
 
+.menu_icon {
+  margin-bottom: 15px !important;
+}
+
 .menu_title {
   position: absolute;
   bottom:0px;
@@ -40,7 +44,7 @@ html, body {
   width :100%;
   height: 45px;
   background: #fafafa;
-  border-bottom:0.1px solid #e6e6e6;
+  border-bottom:0.1px solid #d6d6d6;
 }
 
 .header__icon_update {
@@ -53,8 +57,8 @@ html, body {
 #thumbnails {
   overflow-y: scroll;
   width: 100%;
-  height: calc( 100% - 45px );
-  border-right: 0.1px solid #e6e6e6;
+  height: calc( 100% - 46px );
+  border-right: 0.1px solid #d6d6d6;
 }
 
 .thumbnails__item {
@@ -63,7 +67,7 @@ html, body {
   min-height: 70px;
   align-items: center;
   border-radius: 3px;
-  border: 0.1px solid #e6e6e6;
+  border: 0.1px solid #d6d6d6;
   background: #fff;
 
 }
@@ -74,9 +78,9 @@ html, body {
 }
 
 .thumbnails__item__name {
-  overflow: auto;
   width:150px;
   padding-left: 10px;
+  word-break: break-word;
 }
 
 #capture {
@@ -89,15 +93,14 @@ html, body {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  width:100%;
   height: 45px;
   background: #fafafa;
-  border-bottom: 0.1px solid #e6e6e6;
-  border-left: 0.1px solid #e6e6e6;
+  border-bottom: 0.1px solid #d6d6d6;
+  border-left: 0.1px solid #d6d6d6;
 }
 
 .capture__body {
-  height: calc( 100% - 45px - 50px);
+  height: calc( 100% - 47px - 50px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,8 +135,14 @@ html, body {
 
 .capture__footer {
   height: 50px;
-  width: 100%;
   background: #fafafa;
-  border-top: 0.1px solid #e6e6e6;
-  border-left: 0.1px solid #e6e6e6;
+  border-top: 0.1px solid #d6d6d6;
+  border-left: 0.1px solid #d6d6d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.capture__footer__timer {
+  font-size: 2rem !important;
 }

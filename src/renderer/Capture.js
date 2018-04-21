@@ -4,6 +4,7 @@ import IconButton from 'material-ui/IconButton';
 import FiberManualRecord from 'material-ui-icons/FiberManualRecord';
 import Stop from 'material-ui-icons/Stop';
 import CaptureSizeSelect from './CaptureSizeSelect';
+import Typography from 'material-ui/Typography';
 
 export default class Capture extends Component {
 
@@ -14,8 +15,23 @@ export default class Capture extends Component {
     return <Stop className={styles.capture__body__action_svg_stop} />
   }
 
+  formatTime(time) {
+
+    const zeroPad = (time) => {
+      if ( time < 10 ) { return `0${time}`}
+      return time;
+    }
+
+    const hour = zeroPad(Math.floor(time/60/60));
+    const minuite = zeroPad(Math.floor(time/60));
+    const second = zeroPad(time%60);
+
+    return `${hour}:${minuite}:${second}`
+
+  }
+
   render() {
-    const {stream, isRecord, onClick} = this.props;
+    const {stream, isRecord, onClick, time} = this.props;
     const url = stream && URL.createObjectURL(stream) || '';
     return (
       <div id={styles.capture}>
@@ -30,7 +46,9 @@ export default class Capture extends Component {
           </IconButton>
         </div>
         <div className={styles.capture__footer}>
-          Timer
+          <Typography className={styles.capture__footer__timer} variant='body2'>
+            {this.formatTime(time)}
+          </Typography>
         </div>
       </div>
     );

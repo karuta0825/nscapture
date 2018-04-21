@@ -31,6 +31,8 @@ app.on('ready', () => {
   // デベロッパーツールの起動
   mainWindow.webContents.openDevTools();
 
+  // mainWindow.setMenu(null);
+
  // メインウィンドウが閉じられたときの処理
   mainWindow.on('closed', () => {
     mainWindow = null;
