@@ -6,29 +6,29 @@ import Stop from 'material-ui-icons/Stop';
 import CaptureSizeSelect from './CaptureSizeSelect';
 import Typography from 'material-ui/Typography';
 import Timer from './Timer';
+import ReactDom from 'react-dom';
+
 
 export default class Capture extends Component {
+  constructor(props) {
+    super(props);
+    this.playerURL = null;
+  }
+
+  shouldComponentUpdate(nextProps) {
+    this.playerURL = ReactDom.findDOMNode(this.refs.player).src;
+    return true;
+  }
+
+  componentDidUpdate() {
+    URL.revokeObjectURL(this.playerURL && this.playerURL);
+  }
 
   showSvg(isRecord) {
     if (isRecord) {
        return <FiberManualRecord className={styles.capture__body__action_svg_record} />
     }
     return <Stop className={styles.capture__body__action_svg_stop} />
-  }
-
-  formatTime(time) {
-
-    const zeroPad = (time) => {
-      if ( time < 10 ) { return `0${time}`}
-      return time;
-    }
-
-    const hour = zeroPad(Math.floor(time/60/60));
-    const minuite = zeroPad(Math.floor(time/60));
-    const second = zeroPad(time%60);
-
-    return `${hour}:${minuite}:${second}`
-
   }
 
   render() {
@@ -41,7 +41,7 @@ export default class Capture extends Component {
           <div>画面サイズ</div>
         </div>
         <div className={styles.capture__body}>
-          <video className={styles.capture__body__video} src={url} autoPlay></video>
+          <video ref='player' className={styles.capture__body__video} src={url} autoPlay></video>
           <IconButton className={styles.capture__body__action} onClick={onClick}>
             {this.showSvg(isRecord)}
           </IconButton>

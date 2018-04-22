@@ -15,13 +15,12 @@ export default class Manager extends Component {
   constructor(props) {
     super(props);
     this.dc = new DesktopCapture();
+    this.chunks = [];
+    this.recorder = null;
     this.state = {
       thumbnails : [],
       stream : '',
-      recorder : null,
-      chunks : [],
       isRecord : true,
-      time: 0,
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recoreOrStop = this.recoreOrStop.bind(this);
@@ -33,7 +32,7 @@ export default class Manager extends Component {
         const buffer = Buffer.from(reader.result)
         fs.writeFileSync(path, buffer);
       }
-      reader.readAsArrayBuffer(this.state.chunks[0]);
+      reader.readAsArrayBuffer(this.chunks[0]);
     })
 
   }
@@ -47,14 +46,13 @@ export default class Manager extends Component {
   }
 
   setRecorder(stream = this.state.stream) {
-    const {chunks} = this.state;
     const options = {mimeType: 'video/webm'};
     const recorder = new MediaRecorder(stream, options);
     recorder.ondataavailable = (e) => {
-      chunks.push(e.data);
-      this.setState({chunks:chunks});
+      this.chunks.push(e.data);
     };
-    this.setState({recorder: recorder, chunks: []});
+    this.recorder = recorder;
+    this.chunks = [];
   }
 
   selectThumbnail(item) {
@@ -80,17 +78,16 @@ export default class Manager extends Component {
   }
 
   recoreOrStop() {
-    const {recorder, chunks, isRecord} = this.state;
+    const {isRecord} = this.state;
 
     if (isRecord) {
-      this.setState({chunks:[]})
-      recorder.start();
+      this.chunks = [];
+      this.recorder.start();
     }
     else {
-      recorder.stop();
+      this.recorder.stop();
       this.setRecorder();
       ipc.send('save-dialog');
-
     }
 
     this.setState({isRecord:!isRecord})
