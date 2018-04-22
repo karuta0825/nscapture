@@ -16,6 +16,9 @@ export default class Manager extends Component {
     super(props);
     this.dc = new DesktopCapture();
     this.timeId = null;
+    this.recorder = null;
+    this.chunks = [];
+    this.stream = null;
     this.state = {
       thumbnails : [],
       stream : '',
@@ -65,12 +68,15 @@ export default class Manager extends Component {
     this.dc.getStream(windowId)
       .then((stream) => {
         this.setRecorder(stream);
-        this.setState({stream: stream, isRecord: true});
+        this.stream = stream;
+        this.setState({isRecord: true});
+        // this.setState({stream: stream, isRecord: true});
         this.clearTimer();
       });
   }
 
   refreshWindow() {
+    this.stream = null;
     this.dc.getSources()
     .then((list) => {
       this.setState({thumbnails:list})
@@ -78,7 +84,9 @@ export default class Manager extends Component {
     })
     .then((stream) => {
       this.setRecorder(stream);
-      this.setState({stream: stream, isRecord: true});
+      this.stream = stream
+      this.setState({isRecord: true});
+      // this.setState({stream: stream, isRecord: true});
     })
   }
 
@@ -114,7 +122,9 @@ export default class Manager extends Component {
   }
 
   render() {
-    const {thumbnails, stream, isRecord, time} = this.state;
+    // const {thumbnails, stream, isRecord, time} = this.state;
+    const {thumbnails, isRecord, time} = this.state;
+    const stream = this.stream;
     return (
       <div id={styles.wrapper}>
         <div id={styles.menu}>
@@ -125,7 +135,7 @@ export default class Manager extends Component {
           <IconButton className={styles.menu_icon} color="primary" aria-label="Add to shopping cart">
             <AddShoppingCartIcon />
             <div className={styles.menu_title}>title</div>
-          </IconButton>          
+          </IconButton>
         </div>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
         <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} time={time}/>
