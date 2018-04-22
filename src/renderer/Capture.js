@@ -15,13 +15,12 @@ export default class Capture extends Component {
     this.playerURL = null;
   }
 
-  shouldComponentUpdate(nextProps) {
-    this.playerURL = ReactDom.findDOMNode(this.refs.player).src;
-    return true;
-  }
-
   componentDidUpdate() {
-    URL.revokeObjectURL(this.playerURL && this.playerURL);
+    const {stream} = this.props;
+    const url = URL.createObjectURL(stream);
+    const player = ReactDom.findDOMNode(this.refs.player);
+    URL.revokeObjectURL(player.src);
+    player.src = url;
   }
 
   showSvg(isRecord) {
@@ -32,8 +31,7 @@ export default class Capture extends Component {
   }
 
   render() {
-    const {stream, isRecord, onClick, time} = this.props;
-    const url = stream && URL.createObjectURL(stream) || '';
+    const {isRecord, onClick} = this.props;
     return (
       <div id={styles.capture}>
         <div className={styles.capture__header}>
@@ -41,7 +39,7 @@ export default class Capture extends Component {
           <div>画面サイズ</div>
         </div>
         <div className={styles.capture__body}>
-          <video ref='player' className={styles.capture__body__video} src={url} autoPlay></video>
+          <video ref='player' className={styles.capture__body__video} autoPlay></video>
           <IconButton className={styles.capture__body__action} onClick={onClick}>
             {this.showSvg(isRecord)}
           </IconButton>
