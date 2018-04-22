@@ -15,10 +15,6 @@ export default class Manager extends Component {
   constructor(props) {
     super(props);
     this.dc = new DesktopCapture();
-    this.timeId = null;
-    this.recorder = null;
-    this.chunks = [];
-    this.stream = null;
     this.state = {
       thumbnails : [],
       stream : '',
@@ -30,8 +26,6 @@ export default class Manager extends Component {
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recoreOrStop = this.recoreOrStop.bind(this);
     this.refreshWindow = this.refreshWindow.bind(this);
-    this.setTimer = this.setTimer.bind(this);
-    this.clearTimer = this.clearTimer.bind(this);
 
     ipc.on('saved-file', (e,path) => {
       const reader = new FileReader()
@@ -68,25 +62,20 @@ export default class Manager extends Component {
     this.dc.getStream(windowId)
       .then((stream) => {
         this.setRecorder(stream);
-        this.stream = stream;
-        this.setState({isRecord: true});
-        // this.setState({stream: stream, isRecord: true});
-        this.clearTimer();
+        this.setState({stream: stream, isRecord: true});
       });
   }
 
   refreshWindow() {
-    this.stream = null;
+    let thumbnails;
     this.dc.getSources()
     .then((list) => {
-      this.setState({thumbnails:list})
+      thumbnails = list;
       return this.dc.getStream(list[0].id)
     })
     .then((stream) => {
       this.setRecorder(stream);
-      this.stream = stream
-      this.setState({isRecord: true});
-      // this.setState({stream: stream, isRecord: true});
+      this.setState({stream: stream, thumbnails: thumbnails, isRecord: true});
     })
   }
 
@@ -96,12 +85,10 @@ export default class Manager extends Component {
     if (isRecord) {
       this.setState({chunks:[]})
       recorder.start();
-      this.setTimer();
     }
     else {
       recorder.stop();
       this.setRecorder();
-      this.clearTimer();
       ipc.send('save-dialog');
 
     }
@@ -109,22 +96,9 @@ export default class Manager extends Component {
     this.setState({isRecord:!isRecord})
   }
 
-  setTimer() {
-    this.timeId = setInterval(() => {
-      const time = this.state.time;
-      this.setState({time: time+1})
-    }, 1000);
-  }
-
-  clearTimer() {
-    clearInterval(this.timeId);
-    this.setState({time: 0});
-  }
 
   render() {
-    // const {thumbnails, stream, isRecord, time} = this.state;
-    const {thumbnails, isRecord, time} = this.state;
-    const stream = this.stream;
+    const {thumbnails, stream, isRecord} = this.state;
     return (
       <div id={styles.wrapper}>
         <div id={styles.menu}>
@@ -138,7 +112,7 @@ export default class Manager extends Component {
           </IconButton>
         </div>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
-        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} time={time}/>
+        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} />
       </div>
     );
   }
