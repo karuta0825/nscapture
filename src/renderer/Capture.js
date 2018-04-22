@@ -5,6 +5,7 @@ import FiberManualRecord from 'material-ui-icons/FiberManualRecord';
 import Stop from 'material-ui-icons/Stop';
 import CaptureSizeSelect from './CaptureSizeSelect';
 import Typography from 'material-ui/Typography';
+import Timer from './Timer';
 
 export default class Capture extends Component {
 
@@ -46,9 +47,7 @@ export default class Capture extends Component {
           </IconButton>
         </div>
         <div className={styles.capture__footer}>
-          <Typography className={styles.capture__footer__timer} variant='body2'>
-            {this.formatTime(time)}
-          </Typography>
+          <Timer isRecord={isRecord} />
         </div>
       </div>
     );
