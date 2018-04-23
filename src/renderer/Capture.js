@@ -17,7 +17,7 @@ export default class Capture extends Component {
   componentDidUpdate() {
     URL.revokeObjectURL(this.player.getAttribute('src'));
     this.player.setAttribute('src', URL.createObjectURL(this.props.stream));
-  }  
+  }
 
   componentDidMount() {
     this.player = ReactDom.findDOMNode(this.refs.player);

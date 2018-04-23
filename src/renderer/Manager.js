@@ -57,7 +57,6 @@ export default class Manager extends Component {
 
   selectThumbnail(item) {
     const windowId = item.id;
-    console.log(this.state.stream);
     this.state.stream.getTracks()[0].stop()
     this.dc.getStream(windowId)
       .then((stream) => {
@@ -67,20 +66,22 @@ export default class Manager extends Component {
   }
 
   refreshWindow() {
+    const {stream} = this.state;
     let thumbnails;
     this.dc.getSources()
     .then((list) => {
       thumbnails = list;
       return this.dc.getStream(list[0].id)
     })
-    .then((stream) => {
-      this.setRecorder(stream);
-      this.setState({stream: stream, thumbnails: thumbnails, isRecord: true});
+    .then((newStream) => {
+      stream && stream.getTracks()[0].stop();
+      this.setRecorder(newStream);
+      this.setState({stream: newStream, thumbnails: thumbnails, isRecord: true});
     })
   }
 
   recoreOrStop() {
-    const {isRecord} = this.state;
+    const {isRecord, stream} = this.state;
 
     if (isRecord) {
       this.chunks = [];
@@ -88,6 +89,7 @@ export default class Manager extends Component {
     }
     else {
       this.recorder.stop();
+      stream.getTracks()[0].stop();
       this.setRecorder();
       ipc.send('save-dialog');
     }
