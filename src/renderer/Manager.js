@@ -57,6 +57,8 @@ export default class Manager extends Component {
 
   selectThumbnail(item) {
     const windowId = item.id;
+    console.log(this.state.stream);
+    this.state.stream.getTracks()[0].stop()
     this.dc.getStream(windowId)
       .then((stream) => {
         this.setRecorder(stream);
