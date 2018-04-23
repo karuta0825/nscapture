@@ -108,8 +108,8 @@ html, body {
 }
 
 .capture__body__video {
-  width: 60vmax;
-  height: 50vmin;
+  width: 90%;
+  height: 90%;
 }
 
 .capture__body__action {
