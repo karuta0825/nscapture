@@ -12,15 +12,15 @@ import ReactDom from 'react-dom';
 export default class Capture extends Component {
   constructor(props) {
     super(props);
-    this.playerURL = null;
   }
 
   componentDidUpdate() {
-    const {stream} = this.props;
-    const url = URL.createObjectURL(stream);
-    const player = ReactDom.findDOMNode(this.refs.player);
-    URL.revokeObjectURL(player.src);
-    player.src = url;
+    URL.revokeObjectURL(this.player.getAttribute('src'));
+    this.player.setAttribute('src', URL.createObjectURL(this.props.stream));
+  }  
+
+  componentDidMount() {
+    this.player = ReactDom.findDOMNode(this.refs.player);
   }
 
   showSvg(isRecord) {
