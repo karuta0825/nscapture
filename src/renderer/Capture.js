@@ -31,11 +31,11 @@ export default class Capture extends Component {
   }
 
   render() {
-    const {isRecord, onClick} = this.props;
+    const {isRecord, onClick, changeSize} = this.props;
     return (
       <div id={styles.capture}>
         <div className={styles.capture__header}>
-          <CaptureSizeSelect />
+          <CaptureSizeSelect changeSize={changeSize} />
           <div>画面サイズ</div>
         </div>
         <div className={styles.capture__body}>

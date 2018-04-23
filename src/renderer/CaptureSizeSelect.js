@@ -21,13 +21,17 @@ class CaptureSizeSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      size : 1280720
+      size : '1280x720'
     }
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
+    const {changeSize} = this.props;
+    const [width, height] = event.target.value.split('x');
     this.setState({ [event.target.name]: event.target.value });
+    console.log(width, height);
+    changeSize(width, height);
   }
 
   render() {
@@ -43,9 +47,9 @@ class CaptureSizeSelect extends React.Component {
               name: 'size',
             }}
           >
-            <MenuItem value={1280720}>1280×720</MenuItem>
-            <MenuItem value={720540}>720×540</MenuItem>
-            <MenuItem value={320200}>320×200</MenuItem>
+            <MenuItem value={'1280x720'}>1280×720</MenuItem>
+            <MenuItem value={'720x540'}>720×540</MenuItem>
+            <MenuItem value={'320x200'}>320×200</MenuItem>
           </Select>
         </FormControl>
       </form>

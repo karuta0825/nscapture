@@ -6,6 +6,7 @@ export default class DesktopCapturer {
     this.maxWidth = maxWidth;
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
+    this.windowId;
   }
 
   getSources() {
@@ -20,6 +21,7 @@ export default class DesktopCapturer {
   }
 
   getStream(windowId) {
+    this.windowId = windowId;
     return navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
@@ -35,9 +37,12 @@ export default class DesktopCapturer {
     })
   }
 
-  async setStream(idx) {
-    const srcs = await this.getSources();
-    return this.getStream(srcs[idx].id);
+  resizeView(width, height) {
+    this.minWidth = width;
+    this.maxWidth = width;
+    this.minHeight = height;
+    this.maxHeight = height;
+    return this.getStream(this.windowId);
   }
 
 }

@@ -25,6 +25,7 @@ export default class Manager extends Component {
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recoreOrStop = this.recoreOrStop.bind(this);
     this.refreshWindow = this.refreshWindow.bind(this);
+    this.changeSize = this.changeSize.bind(this);
 
     ipc.on('saved-file', (e,path) => {
       const reader = new FileReader()
@@ -53,6 +54,16 @@ export default class Manager extends Component {
     };
     this.recorder = recorder;
     this.chunks = [];
+  }
+
+  changeSize(width, height) {
+    const {stream} = this.state;
+    this.dc.resizeView(width, height)
+      .then((newStream) => {
+        stream.getTracks()[0].stop();
+        this.setRecorder(newStream);
+        this.setState({stream: newStream, isRecord: true});
+      })
   }
 
   selectThumbnail(item) {
@@ -113,7 +124,7 @@ export default class Manager extends Component {
           </IconButton>
         </div>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
-        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} />
+        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} changeSize={this.changeSize}/>
       </div>
     );
   }
