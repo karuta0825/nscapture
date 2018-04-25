@@ -5,6 +5,7 @@ import Input, { InputLabel } from 'material-ui/Input';
 import { MenuItem } from 'material-ui/Menu';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import Select from 'material-ui/Select';
+import {sizeList} from './constants/Window';
 
 const styles = theme => ({
   root: {
@@ -30,7 +31,6 @@ class CaptureSizeSelect extends React.Component {
     const {changeSize} = this.props;
     const [width, height] = event.target.value.split('x');
     this.setState({ [event.target.name]: event.target.value });
-    console.log(width, height);
     changeSize(width, height);
   }
 
@@ -47,9 +47,12 @@ class CaptureSizeSelect extends React.Component {
               name: 'size',
             }}
           >
-            <MenuItem value={'1280x720'}>1280×720</MenuItem>
-            <MenuItem value={'720x540'}>720×540</MenuItem>
-            <MenuItem value={'320x200'}>320×200</MenuItem>
+          {
+            Object.keys(sizeList).map((v,k) => {
+              const value = sizeList[v].join('x');
+              return <MenuItem value={value}>{value}</MenuItem>
+            })
+          }
           </Select>
         </FormControl>
       </form>
