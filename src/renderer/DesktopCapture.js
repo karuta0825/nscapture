@@ -7,6 +7,7 @@ export default class DesktopCapturer {
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
     this.windowId;
+    this.hasAudio = false;
   }
 
   getSources() {
@@ -22,19 +23,27 @@ export default class DesktopCapturer {
 
   getStream(windowId) {
     this.windowId = windowId;
-    return navigator.mediaDevices.getUserMedia({
-      audio: false,
+    const setting = this.toggleAudio();
+    return navigator.mediaDevices.getUserMedia(
+    {
+      // audio: false,
+      audio: {
+        mandatory: {
+          chromeMediaSource: 'desktop'
+        }
+      },
       video: {
         mandatory: {
           chromeMediaSource: 'desktop',
-          chromeMediaSourceId: windowId,
+          chromeMediaSourceId: this.windowId,
           minWidth: this.minWidth,
           maxWidth: this.maxWidth,
           minHeight: this.minHeight,
           maxHeight: this.maxHeight,
         }
       }
-    })
+    }
+    );
   }
 
   resizeView(width, height) {
@@ -43,6 +52,43 @@ export default class DesktopCapturer {
     this.minHeight = height;
     this.maxHeight = height;
     return this.getStream(this.windowId);
+  }
+
+  toggleAudio(windowId) {
+    const hasAudio = this.hasAudio;
+    this.hasAudio = !this.hasAudio;
+    if (hasAudio) {
+      return {
+        audio: {
+          mandatory: {
+            chromeMediaSource: 'desktop'
+          }
+        },
+        video: {
+          mandatory: {
+            chromeMediaSource: 'desktop',
+            chromeMediaSourceId: this.windowId,
+            minWidth: this.minWidth,
+            maxWidth: this.maxWidth,
+            minHeight: this.minHeight,
+            maxHeight: this.maxHeight,
+          }
+        }
+      };
+    }
+    return {
+      audio: false,
+      video: {
+        mandatory: {
+          chromeMediaSource: 'desktop',
+          chromeMediaSourceId: this.windowId,
+          minWidth: this.minWidth,
+          maxWidth: this.maxWidth,
+          minHeight: this.minHeight,
+          maxHeight: this.maxHeight,
+        }
+      }
+    };
   }
 
 }
