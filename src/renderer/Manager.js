@@ -19,7 +19,7 @@ export default class Manager extends Component {
     this.recorder = null;
     this.state = {
       thumbnails : [],
-      stream : '',
+      stream : null,
       isRecord : true,
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
@@ -58,9 +58,11 @@ export default class Manager extends Component {
 
   changeSize(width, height) {
     const {stream} = this.state;
+    stream.getTracks().forEach((track)=>{
+      track.stop();
+    })
     this.dc.resizeView(width, height)
       .then((newStream) => {
-        stream.getTracks()[0].stop();
         this.setRecorder(newStream);
         this.setState({stream: newStream, isRecord: true});
       })
@@ -68,7 +70,9 @@ export default class Manager extends Component {
 
   selectThumbnail(item) {
     const windowId = item.id;
-    this.state.stream.getTracks()[0].stop()
+    this.state.stream.getTracks().forEach((track)=>{
+      track.stop();
+    })
     this.dc.getStream(windowId)
       .then((stream) => {
         this.setRecorder(stream);
@@ -78,6 +82,10 @@ export default class Manager extends Component {
 
   refreshWindow() {
     const {stream} = this.state;
+    stream && stream.getTracks().forEach((track)=>{
+      track.stop();
+    })
+
     let thumbnails;
     this.dc.getSources()
     .then((list) => {
@@ -85,7 +93,6 @@ export default class Manager extends Component {
       return this.dc.getStream(list[0].id)
     })
     .then((newStream) => {
-      stream && stream.getTracks()[0].stop();
       this.setRecorder(newStream);
       this.setState({stream: newStream, thumbnails: thumbnails, isRecord: true});
     })
@@ -100,7 +107,6 @@ export default class Manager extends Component {
     }
     else {
       this.recorder.stop();
-      stream.getTracks()[0].stop();
       this.setRecorder();
       ipc.send('save-dialog');
     }
