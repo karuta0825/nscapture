@@ -7,7 +7,7 @@ export default class DesktopCapturer {
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
     this.windowId;
-    this.hasAudio = false;
+    this.hasAudio = true;
   }
 
   getSources() {
@@ -21,29 +21,10 @@ export default class DesktopCapturer {
     });
   }
 
-  getStream(windowId) {
-    this.windowId = windowId;
-    const setting = this.toggleAudio();
-    return navigator.mediaDevices.getUserMedia(
-    {
-      // audio: false,
-      audio: {
-        mandatory: {
-          chromeMediaSource: 'desktop'
-        }
-      },
-      video: {
-        mandatory: {
-          chromeMediaSource: 'desktop',
-          chromeMediaSourceId: this.windowId,
-          minWidth: this.minWidth,
-          maxWidth: this.maxWidth,
-          minHeight: this.minHeight,
-          maxHeight: this.maxHeight,
-        }
-      }
-    }
-    );
+  getStream(windowId = this.windowId) {
+    this.windowId = windowId
+    const setting = this.getSetting();
+    return navigator.mediaDevices.getUserMedia(setting);
   }
 
   resizeView(width, height) {
@@ -51,13 +32,11 @@ export default class DesktopCapturer {
     this.maxWidth = width;
     this.minHeight = height;
     this.maxHeight = height;
-    return this.getStream(this.windowId);
+    return this.getStream();
   }
 
-  toggleAudio(windowId) {
-    const hasAudio = this.hasAudio;
-    this.hasAudio = !this.hasAudio;
-    if (hasAudio) {
+  getSetting() {
+    if (this.hasAudio) {
       return {
         audio: {
           mandatory: {
@@ -89,6 +68,11 @@ export default class DesktopCapturer {
         }
       }
     };
+  }
+
+  toggleAudio(hasAudio = false) {
+    this.hasAudio = hasAudio;
+    return this.getStream();
   }
 
 }
