@@ -18,14 +18,16 @@ export default class Manager extends Component {
     this.chunks = [];
     this.recorder = null;
     this.state = {
-      thumbnails : [],
-      stream : null,
-      isRecord : true,
+      thumbnails: [],
+      stream: null,
+      isRecord: true,
+      hasAudio: false,
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recoreOrStop = this.recoreOrStop.bind(this);
     this.refreshWindow = this.refreshWindow.bind(this);
     this.changeSize = this.changeSize.bind(this);
+    this.hasAudioRecord = this.hasAudioRecord.bind(this);
 
     ipc.on('saved-file', (e,path) => {
       const reader = new FileReader()
@@ -68,6 +70,22 @@ export default class Manager extends Component {
       })
   }
 
+
+  hasAudioRecord() {
+    const {stream, hasAudio} = this.state;
+    stream.getTracks().forEach((track)=>{
+      track.stop();
+    })
+    this.dc.toggleAudio(!hasAudio)
+      .then((newStream) => {
+        this.setRecorder(newStream);
+        this.setState({stream: newStream, isRecord: true, hasAudio: !hasAudio});
+      })
+      .catch((err) => {
+        this.setState({isRecord: true, hasAudio: !hasAudio});
+      });
+  }
+
   selectThumbnail(item) {
     const windowId = item.id;
     this.state.stream.getTracks().forEach((track)=>{
@@ -77,8 +95,9 @@ export default class Manager extends Component {
       .then((stream) => {
         this.setRecorder(stream);
         this.setState({stream: stream, isRecord: true});
-      });
+      })
   }
+
 
   refreshWindow() {
     const {stream} = this.state;
@@ -116,7 +135,7 @@ export default class Manager extends Component {
 
 
   render() {
-    const {thumbnails, stream, isRecord} = this.state;
+    const {thumbnails, stream, isRecord, hasAudio} = this.state;
     return (
       <div id={styles.wrapper}>
         <div id={styles.menu}>
@@ -130,7 +149,7 @@ export default class Manager extends Component {
           </IconButton>
         </div>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
-        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} changeSize={this.changeSize}/>
+        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
       </div>
     );
   }

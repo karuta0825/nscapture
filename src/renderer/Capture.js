@@ -7,7 +7,8 @@ import CaptureSizeSelect from './CaptureSizeSelect';
 import Typography from 'material-ui/Typography';
 import Timer from './Timer';
 import ReactDom from 'react-dom';
-
+import Mic from '@material-ui/icons/Mic';
+import MicOff from '@material-ui/icons/MicOff';
 
 export default class Capture extends Component {
   constructor(props) {
@@ -30,13 +31,23 @@ export default class Capture extends Component {
     return <Stop className={styles.capture__body__action_svg_stop} />
   }
 
+  showAudio(hasAudio) {
+    if (hasAudio) {
+      return  <MicOff style={{ fontSize: 20 }} />
+    }
+    return <Mic style={{ fontSize: 20 }}/>
+  }
+
   render() {
-    const {isRecord, onClick, changeSize} = this.props;
+    const {isRecord, hasAudio, onClick, changeSize, hasAudioRecord} = this.props;
     return (
       <div id={styles.capture}>
         <div className={styles.capture__header}>
           <CaptureSizeSelect changeSize={changeSize} />
           <div>画面サイズ</div>
+          <IconButton color="primary" component="span" onClick={hasAudioRecord}>
+            {this.showAudio(hasAudio)}
+          </IconButton>
         </div>
         <div className={styles.capture__body}>
           <video ref='player' className={styles.capture__body__video} autoPlay></video>

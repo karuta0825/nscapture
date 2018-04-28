@@ -7,7 +7,7 @@ export default class DesktopCapturer {
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
     this.windowId;
-    this.hasAudio = true;
+    this.hasAudio = false;
   }
 
   getSources() {
@@ -40,7 +40,7 @@ export default class DesktopCapturer {
       return {
         audio: {
           mandatory: {
-            chromeMediaSource: 'desktop'
+            chromeMediaSource: 'desktop',
           }
         },
         video: {
