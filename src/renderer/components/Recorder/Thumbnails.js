@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../css/app.css';
+import styles from '../../../css/app.css';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Autorenew from 'material-ui-icons/Autorenew';

@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Manager from './Manager';
-// import {theme} from '../assets/theme'
+import Navigator from './components/Navigator/Navigator';
+import { BrowserRouter as Router } from 'react-router-dom'
 
 export default class App extends Component {
-
   render() {
     return (
       <MuiThemeProvider>
-        <Manager />
+        <Router>
+          <Navigator />
+        </Router>
       </MuiThemeProvider>
     )
   }

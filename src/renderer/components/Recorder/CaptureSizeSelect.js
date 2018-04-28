@@ -5,7 +5,7 @@ import Input, { InputLabel } from 'material-ui/Input';
 import { MenuItem } from 'material-ui/Menu';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import Select from 'material-ui/Select';
-import {sizeList} from './constants/Window';
+import {sizeList} from '../../constants/Window';
 
 const styles = theme => ({
   root: {

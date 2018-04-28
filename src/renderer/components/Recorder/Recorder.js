@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import styles from '../css/app.css';
+import styles from '../../../css/app.css';
 import Thumbnails from './Thumbnails';
-import DesktopCapture from './DesktopCapture';
+import DesktopCapture from '../../logics/DesktopCapture';
 import Capture from './Capture';
-import { ipcRenderer as ipc} from 'electron';
+import { ipcRenderer as ipc } from 'electron';
 import fs from 'fs';
-import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
-
 
 export default class Manager extends Component {
   constructor(props) {
@@ -45,6 +40,11 @@ export default class Manager extends Component {
   }
 
   componentWillUnmount() {
+    const {stream, isRecord} = this.state;
+    stream.getTracks().forEach((track)=>{
+      track.stop();
+    })
+    if (!isRecord) { this.recorder.stop() }
     ipc.removeAllListeners('saved-file');
   }
 
@@ -69,7 +69,6 @@ export default class Manager extends Component {
         this.setState({stream: newStream, isRecord: true});
       })
   }
-
 
   hasAudioRecord() {
     const {stream, hasAudio} = this.state;
@@ -137,17 +136,7 @@ export default class Manager extends Component {
   render() {
     const {thumbnails, stream, isRecord, hasAudio} = this.state;
     return (
-      <div id={styles.wrapper}>
-        <div id={styles.menu}>
-          <IconButton className={styles.menu_icon} color="primary" component="span">
-            <PhotoCamera />
-            <div className={styles.menu_title}>title</div>
-          </IconButton>
-          <IconButton className={styles.menu_icon} color="primary" aria-label="Add to shopping cart">
-            <AddShoppingCartIcon />
-            <div className={styles.menu_title}>title</div>
-          </IconButton>
-        </div>
+      <div id={styles.record}>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
         <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
       </div>

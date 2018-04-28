@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../css/app.css';
+import styles from '../../../css/app.css';
 import IconButton from 'material-ui/IconButton';
 import FiberManualRecord from 'material-ui-icons/FiberManualRecord';
 import Stop from 'material-ui-icons/Stop';
@@ -33,9 +33,9 @@ export default class Capture extends Component {
 
   showAudio(hasAudio) {
     if (hasAudio) {
-      return  <MicOff style={{ fontSize: 20 }} />
+      return <Mic style={{ fontSize: 20 }}/>
     }
-    return <Mic style={{ fontSize: 20 }}/>
+    return  <MicOff style={{ fontSize: 20 }} />
   }
 
   render() {
@@ -44,7 +44,6 @@ export default class Capture extends Component {
       <div id={styles.capture}>
         <div className={styles.capture__header}>
           <CaptureSizeSelect changeSize={changeSize} />
-          <div>画面サイズ</div>
           <IconButton color="primary" component="span" onClick={hasAudioRecord}>
             {this.showAudio(hasAudio)}
           </IconButton>

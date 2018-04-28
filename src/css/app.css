@@ -28,7 +28,13 @@ html, body {
 .menu_title {
   position: absolute;
   bottom:0px;
-  font-size: 10px;
+  font-size: 8px;
+}
+
+#record {
+  display: flex;
+  flex:1;
+  height: 100%;
 }
 
 #capture_list {
