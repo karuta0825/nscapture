@@ -10,7 +10,7 @@ let mainWindow;
 //  初期化が完了した時の処理
 app.on('ready', () => {
   // メインウィンドウを作成します
-  mainWindow = new BrowserWindow({width: 1200, height: 900});
+  mainWindow = new BrowserWindow({width: 780, height: 520});
   mainWindow.loadURL(`${ROOT_PATH}/dist/renderer/index.html`);
 
   ipc.on('save-dialog', (e) => {
