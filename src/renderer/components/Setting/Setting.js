@@ -103,8 +103,8 @@ class Setting extends Component {
   }
 }
 
-SwitchListSecondary.propTypes = {
+Setting.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SwitchListSecondary);
+export default withStyles(styles)(Setting);

@@ -7,9 +7,9 @@ import Menu from './Menu';
 import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom'
 import { getRootHtmlPath } from '../../../utils/Path';
 
-export default class Routes extends Component {
+export default class Navigator extends Component {
   render() {
-    const {location, history } = this.props;
+    const { location, history } = this.props;
     return (
       <Router >
         <div id={styles.wrapper}>
