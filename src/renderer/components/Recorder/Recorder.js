@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../../../css/app.css';
+import styles from './css/Recorder.css';
 import Thumbnails from './Thumbnails';
 import DesktopCapture from '../../logics/DesktopCapture';
 import Capture from './Capture';
@@ -146,7 +146,7 @@ export default class Manager extends Component {
   render() {
     const {thumbnails, stream, isRecord, hasAudio} = this.state;
     return (
-      <div id={styles.record}>
+      <div id={styles.recordView}>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
         <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
       </div>

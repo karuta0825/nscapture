@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../../../css/app.css';
+import styles from './css/Timer.css';
 import Typography from 'material-ui/Typography';
 
 
@@ -50,7 +50,7 @@ export default class Timer extends Component {
     const {isRecord} = this.props;
     const {time} = this.state;
     return (
-      <Typography className={styles.capture__footer__timer} variant='body2'>
+      <Typography className={styles.view} variant='body2'>
         {this.formatTime(time)}
       </Typography>
     );

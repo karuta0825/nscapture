@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../../../css/app.css';
+import styles from './css/Capture.css';
 import IconButton from 'material-ui/IconButton';
 import FiberManualRecord from 'material-ui-icons/FiberManualRecord';
 import Stop from 'material-ui-icons/Stop';
@@ -26,9 +26,9 @@ export default class Capture extends Component {
 
   showSvg(isRecord) {
     if (isRecord) {
-       return <FiberManualRecord className={styles.capture__body__action_svg_record} />
+       return <FiberManualRecord className={styles.body__action_svg_record} />
     }
-    return <Stop className={styles.capture__body__action_svg_stop} />
+    return <Stop className={styles.body__action_svg_stop} />
   }
 
   showAudio(hasAudio) {
@@ -41,20 +41,20 @@ export default class Capture extends Component {
   render() {
     const {isRecord, hasAudio, onClick, changeSize, hasAudioRecord} = this.props;
     return (
-      <div id={styles.capture}>
-        <div className={styles.capture__header}>
+      <div id={styles.wrapper}>
+        <div className={styles.header}>
           <CaptureSizeSelect changeSize={changeSize} />
           <IconButton color="primary" component="span" onClick={hasAudioRecord}>
             {this.showAudio(hasAudio)}
           </IconButton>
         </div>
-        <div className={styles.capture__body}>
-          <video ref='player' className={styles.capture__body__video} autoPlay muted></video>
-          <IconButton className={styles.capture__body__action} onClick={onClick}>
+        <div className={styles.body}>
+          <video ref='player' className={styles.body__video} autoPlay muted></video>
+          <IconButton className={styles.body__action} onClick={onClick}>
             {this.showSvg(isRecord)}
           </IconButton>
         </div>
-        <div className={styles.capture__footer}>
+        <div className={styles.footer}>
           <Timer isRecord={isRecord} />
         </div>
       </div>

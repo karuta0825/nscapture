@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../../../css/app.css';
+import styles from './css/Navigator.css';
 import Recorder from '../Recorder/Recorder';
 import Player from '../Player/Player';
 import Setting from '../Setting/Setting';
