@@ -134,6 +134,9 @@ export default class Manager extends Component {
       this.recorder.start();
     }
     else {
+      stream.getTracks().forEach((track)=>{
+        track.stop();
+      });
       this.recorder.stop();
       this.setRecorder();
       ipc.send('save-dialog', senderPath);
