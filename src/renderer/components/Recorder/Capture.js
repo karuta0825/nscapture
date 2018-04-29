@@ -49,7 +49,7 @@ export default class Capture extends Component {
           </IconButton>
         </div>
         <div className={styles.capture__body}>
-          <video ref='player' className={styles.capture__body__video} autoPlay></video>
+          <video ref='player' className={styles.capture__body__video} autoPlay muted></video>
           <IconButton className={styles.capture__body__action} onClick={onClick}>
             {this.showSvg(isRecord)}
           </IconButton>
