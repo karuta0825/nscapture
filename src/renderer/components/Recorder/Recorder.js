@@ -9,6 +9,8 @@ import fs from 'fs';
 export default class Manager extends Component {
   constructor(props) {
     super(props);
+    const hasAudio = ( localStorage.getItem('hasAudio')  === 'true' );
+    const defaultSize = localStorage.getItem('size');
     this.dc = new DesktopCapture();
     this.chunks = [];
     this.recorder = null;
@@ -16,7 +18,7 @@ export default class Manager extends Component {
       thumbnails: [],
       stream: null,
       isRecord: true,
-      hasAudio: false,
+      hasAudio: hasAudio,
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recoreOrStop = this.recoreOrStop.bind(this);
@@ -41,7 +43,7 @@ export default class Manager extends Component {
 
   componentWillUnmount() {
     const {stream, isRecord} = this.state;
-    stream.getTracks().forEach((track)=>{
+    stream && stream.getTracks().forEach((track)=>{
       track.stop();
     })
     if (!isRecord) { this.recorder.stop() }
@@ -72,7 +74,7 @@ export default class Manager extends Component {
 
   hasAudioRecord() {
     const {stream, hasAudio} = this.state;
-    stream.getTracks().forEach((track)=>{
+    stream && stream.getTracks().forEach((track)=>{
       track.stop();
     })
     this.dc.toggleAudio(!hasAudio)
@@ -99,7 +101,7 @@ export default class Manager extends Component {
 
 
   refreshWindow() {
-    const {stream} = this.state;
+    const {stream, hasAudio} = this.state;
     stream && stream.getTracks().forEach((track)=>{
       track.stop();
     })
@@ -108,7 +110,7 @@ export default class Manager extends Component {
     this.dc.getSources()
     .then((list) => {
       thumbnails = list;
-      return this.dc.getStream(list[0].id)
+      return this.dc.getStream(list[0].id, hasAudio)
     })
     .then((newStream) => {
       this.setRecorder(newStream);
@@ -118,6 +120,14 @@ export default class Manager extends Component {
 
   recoreOrStop() {
     const {isRecord, stream} = this.state;
+    const path = localStorage.getItem('savePath');
+    let senderPath;
+    if (path !== 'null') {
+      senderPath = path;
+    }
+    else {
+      senderPath = '.';
+    }
 
     if (isRecord) {
       this.chunks = [];
@@ -126,7 +136,7 @@ export default class Manager extends Component {
     else {
       this.recorder.stop();
       this.setRecorder();
-      ipc.send('save-dialog');
+      ipc.send('save-dialog', senderPath);
     }
 
     this.setState({isRecord:!isRecord})

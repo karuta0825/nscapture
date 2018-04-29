@@ -21,8 +21,10 @@ const styles = theme => ({
 class CaptureSizeSelect extends React.Component {
   constructor(props) {
     super(props);
+    const defaultSize = localStorage.getItem('size');
+    console.log(defaultSize);
     this.state = {
-      size : '1280x720'
+      size : defaultSize || '1280x720',
     }
     this.handleChange = this.handleChange.bind(this);
   }

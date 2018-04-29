@@ -13,10 +13,11 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({width: 780, height: 520});
   mainWindow.loadURL(`${ROOT_PATH}/dist/renderer/index.html`);
 
-  ipc.on('save-dialog', (e) => {
+  ipc.on('save-dialog', (e, path) => {
 
     const options = {
       title: '動画保存',
+      defaultPath: path,
       filters: [
         { name: 'ドキュメント', extensions: ['webm']},
       ],
@@ -27,6 +28,20 @@ app.on('ready', () => {
       e.sender.send('saved-file', filename);
     });
   });
+
+  ipc.on('open-folder', (e) => {
+
+    const options = {
+      title: '保存先',
+      properties: ['openDirectory','createDirectory']
+    };
+
+    dialog.showOpenDialog(options, (directoryPaths) => {
+      const path = directoryPaths ? directoryPaths[0] : '未設定'
+      e.sender.send('select-folder', path);
+    });
+
+  })
 
   // デベロッパーツールの起動
   mainWindow.webContents.openDevTools();

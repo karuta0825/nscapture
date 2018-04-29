@@ -17,15 +17,15 @@ class Routes extends Component {
     return (
       <div id={styles.wrapper}>
         <div id={styles.menu}>
-          <IconButton className={styles.menu_icon} color="primary" onClick={() => {history.push(getRootHtmlPath())}} >
+          <IconButton className={styles.menu_icon} color='secondary' onClick={() => {history.push(getRootHtmlPath())}} >
             <VideoCam />
             <div className={styles.menu_title}>録画</div>
           </IconButton>
-          <IconButton className={styles.menu_icon} color="primary" onClick={() => {history.push('/player')}}>
+          <IconButton className={styles.menu_icon} color="secondary" onClick={() => {history.push('/player')}}>
             <VideoLibrary />
             <div className={styles.menu_title}>再生</div>
           </IconButton>
-          <IconButton className={styles.menu_icon} color="primary" onClick={() => {history.push('/setting')}}>
+          <IconButton className={styles.menu_icon} color="secondary" onClick={() => {history.push('/setting')}}>
             <Build />
             <div className={styles.menu_title}>設定</div>
           </IconButton>

@@ -21,8 +21,9 @@ export default class DesktopCapturer {
     });
   }
 
-  getStream(windowId = this.windowId) {
-    this.windowId = windowId
+  getStream(windowId = this.windowId, hasAudio = false) {
+    this.windowId = windowId;
+    this.hasAudio = hasAudio;
     const setting = this.getSetting();
     return navigator.mediaDevices.getUserMedia(setting);
   }
@@ -72,7 +73,7 @@ export default class DesktopCapturer {
 
   toggleAudio(hasAudio = false) {
     this.hasAudio = hasAudio;
-    return this.getStream();
+    return this.getStream(this.windowId, this.hasAudio);
   }
 
 }

@@ -11,7 +11,9 @@ export default class Thumbnails extends Component {
     return (
       <div id={styles.capture_list}>
         <div className={styles.capture_list__header}>
-          <div>Title</div>
+          <div>
+            <Typography variant='body2'>ウィンドウ一覧</Typography>
+          </div>
           <IconButton className={styles.header__icon_update} color="primary" component="span" onClick={refreshWindow}>
             <Autorenew style={{ fontSize: 20 }}/>
           </IconButton>
