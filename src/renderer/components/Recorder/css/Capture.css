@@ -15,7 +15,7 @@
 }
 
 .body {
-  height: calc( 100% - 47px - 50px);
+  height: calc( 100% - 49px - 50px);
   display: flex;
   align-items: center;
   justify-content: center;

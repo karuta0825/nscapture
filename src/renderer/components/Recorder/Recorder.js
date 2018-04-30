@@ -21,7 +21,7 @@ export default class Manager extends Component {
       hasAudio: hasAudio,
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
-    this.recoreOrStop = this.recoreOrStop.bind(this);
+    this.recordOrStop = this.recordOrStop.bind(this);
     this.refreshWindow = this.refreshWindow.bind(this);
     this.changeSize = this.changeSize.bind(this);
     this.hasAudioRecord = this.hasAudioRecord.bind(this);
@@ -118,31 +118,33 @@ export default class Manager extends Component {
     })
   }
 
-  recoreOrStop() {
+  getSavePath() {
+    const localPath = localStorage.getItem('savePath');
+    return (localPath !== 'null') ? localPath : '.';
+  }
+
+  recordOrStop() {
     const {isRecord, stream} = this.state;
-    const path = localStorage.getItem('savePath');
-    let senderPath;
-    if (path !== 'null') {
-      senderPath = path;
-    }
-    else {
-      senderPath = '.';
-    }
+    const savePath = this.getSavePath();
 
     if (isRecord) {
       this.chunks = [];
       this.recorder.start();
+      this.setState({isRecord: false})
     }
     else {
       stream.getTracks().forEach((track)=>{
         track.stop();
       });
       this.recorder.stop();
-      this.setRecorder();
-      ipc.send('save-dialog', senderPath);
-    }
+      ipc.send('save-dialog', savePath);
 
-    this.setState({isRecord:!isRecord})
+      this.dc.getStream()
+        .then((newStream) => {
+          this.setRecorder(newStream);
+          this.setState({stream: newStream, isRecord: true});
+        })
+    }
   }
 
 
@@ -151,7 +153,7 @@ export default class Manager extends Component {
     return (
       <div id={styles.recordView}>
         <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
-        <Capture stream={stream} onClick={this.recoreOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
+        <Capture stream={stream} onClick={this.recordOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
       </div>
     );
   }
