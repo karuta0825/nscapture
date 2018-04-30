@@ -3,42 +3,29 @@ import IconButton from 'material-ui/IconButton';
 import Autorenew from 'material-ui-icons/Autorenew';
 import styles from './css/PlayList.css';
 
-
 export default class PlayList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      list: [],
-    };
-    this.refreshList = this.refreshList.bind(this);
-  }
-
-  refreshList() {
-    console.log('refreshed');
-  }
-
-  selectVideo() {
-
   }
 
   render() {
-    const { classs } = this.props;
-    const { list } = this.state;
+    const { classs, files, refreshList, selectVideo } = this.props;
     return (
       <div className={styles[classs]}>
         <div className={styles.header}>
           <div className={styles.header__title}>
           </div>
-          <IconButton className={styles.header__icon_update} color="primary" component="span" onClick={this.refreshList}>
+          <IconButton className={styles.header__icon_update} color="primary" component="span" onClick={refreshList}>
             <Autorenew style={{ fontSize: 20 }} />
           </IconButton>
         </div>
         <div className={styles.body}>
           {
-            list.map(v => (
-              <div>
-                <div>image</div>
-                <div>{v.name}</div>
+            files.map((v,k) => (
+              <div className={styles.item} onClick={() => selectVideo(k)}>
+                <div className={styles.item__name}>{v.name}</div>
+                <div className={styles.item__date}>{v.birthday}</div>
+                <div className={styles.item__size}>{v.size}</div>
               </div>
             ))
           }

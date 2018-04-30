@@ -35,3 +35,10 @@
   height: calc( 100% - 46px );
   border-right: 0.1px solid #d6d6d6;
 }
+
+.item {
+  margin: 5px;
+  border-radius: 3px;
+  border: 0.1px solid #d6d6d6;
+  background: #fff;
+}

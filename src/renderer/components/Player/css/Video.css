@@ -14,7 +14,15 @@
 }
 
 .body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: calc( 100% - 47px );
+}
+
+.video {
+  width: 95%;
+  height: 95%;
 }
 
 .header__icon_zoom {
