@@ -56,3 +56,16 @@
   cursor: pointer;
 }
 
+.item__name, .item__date {
+  padding-left: 5px;
+}
+
+.item__date {
+  font-size: 0.8rem;
+}
+
+.item__size {
+  text-align: right;
+  padding-right: 5px;
+  font-size: 0.8rem;
+}
