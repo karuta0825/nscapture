@@ -12,6 +12,7 @@ import styles from './css/Video.css';
 export default class Video extends Component {
   constructor(props) {
     super(props);
+    this.onDrop = this.onDrop.bind(this);
 
     ipc.on('select-file', (e, path) => {
       if (!path) {return;}
@@ -22,7 +23,7 @@ export default class Video extends Component {
   componentDidUpdate(prevProps) {
     if ( prevProps.src !== this.props.src ) {
       this.player.src =  this.props.src;
-      this.player.currentTime =  60*60*24;
+      this.player.currentTime = 60*60*24;
     }
   }
 
@@ -38,13 +39,23 @@ export default class Video extends Component {
     ipc.send('select-file');
   }
 
+  onDrop(e) {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if ( file.type === 'video/webm' || file.type === 'video/mp4') {
+      this.props.openFile(file.path);
+    }
+  }
+
   showInitView(src) {
     if (src) { return; }
     return (
       <div className={styles.description}>
         <Typography variant='body2'>
-          <p>動画一覧から動画を選択してください</p>
-          <p>また右上の開くボタンから任意の動画が再生できます</p>
+          <p>左の動画一覧から動画を選択してください</p>
+          <p>任意の動画を再生するには、</p>
+          <p>右上の開くボタンをクリックするか</p>
+          <p>ここにファイルをドラッグ&ドロップしてください</p>
         </Typography>
       </div>
     );
@@ -68,7 +79,10 @@ export default class Video extends Component {
         </Button>
 
         </div>
-        <div className={styles.body}>
+        <div className={styles.body}
+          onDragOver={ e => e.preventDefault() }
+          onDrop={this.onDrop}
+        >
           {this.showInitView(src)}
           <video ref='player' className={(src) ? styles.video : styles.video__none} controls></video>
         </div>

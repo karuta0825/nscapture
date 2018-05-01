@@ -10,7 +10,7 @@ import { getRootHtmlPath } from '../../../utils/Path';
 export default function Navigator() {
   return (
     <Router >
-      <div id={styles.wrapper}>
+      <div id={styles.wrapper} onDragOver={e => e.preventDefault()} onDrop={e => e.preventDefault()}>
         <Menu />
         <Switch>
           <Route exact path={getRootHtmlPath()} component={Recorder} />
