@@ -10,11 +10,13 @@ export default class Player extends Component {
     this.state = {
       isExpand: false,
       files: [],
-      src: '',
+      src: null,
+      selectedItemNum: null,
     };
     this.toggleExpand = this.toggleExpand.bind(this);
     this.refreshList = this.refreshList.bind(this);
     this.selectVideo = this.selectVideo.bind(this);
+    this.openFile = this.openFile.bind(this);
   }
 
   componentWillMount() {
@@ -31,22 +33,26 @@ export default class Player extends Component {
     if (!searchPath) { return; }
     filterVideoFile(searchPath)
       .then((files) => {
-        this.setState({ files: files, src:`${searchPath}/${files[0].name}` });
+        this.setState({ files: files });
       })
   }
 
   selectVideo(order) {
     const selected = this.state.files[order];
     const searchPath = localStorage.getItem('savePath');
-    this.setState({src: `${searchPath}/${selected.name}`});
+    this.setState({src: `${searchPath}/${selected.name}`, selectedItemNum: order});
+  }
+
+  openFile(src) {
+    this.setState({src:src, selectedItemNum: null});
   }
 
   render() {
-    const { isExpand, files, src } = this.state;
+    const { isExpand, files, src, selectedItemNum } = this.state;
     return (
       <div className={styles.wrapper}>
-        <PlayList classs={isExpand ? 'wrapper--close' : 'wrapper--open'} files={files} refreshList={this.refreshList} selectVideo={this.selectVideo} />
-        <Video src={src} isExpand={isExpand} toggleExpand={this.toggleExpand} />
+        <PlayList classs={isExpand ? 'wrapper--close' : 'wrapper--open'} files={files} refreshList={this.refreshList} selectVideo={this.selectVideo} selectedItemNum={selectedItemNum}/>
+        <Video src={src} isExpand={isExpand} toggleExpand={this.toggleExpand} openFile={this.openFile}/>
       </div>
     );
   }

@@ -19,7 +19,7 @@ app.on('ready', () => {
       title: '動画保存',
       defaultPath: path,
       filters: [
-        { name: 'ドキュメント', extensions: ['webm']},
+        { name: '動画', extensions: ['webm']},
       ],
       properties: ['openFile', 'createDirectory']
     };
@@ -27,6 +27,23 @@ app.on('ready', () => {
     dialog.showSaveDialog(options, (filename) => {
       e.sender.send('saved-file', filename);
     });
+  });
+
+  ipc.on('select-file', (e) => {
+
+    const options = {
+      title: '動画選択',
+      filters: [
+        { name: '動画', extensions: ['webm', 'mp4']}
+      ],
+      properties: ['openFile'],
+    };
+
+    dialog.showOpenDialog(options, (files) => {
+      const filePath = (files) ? files[0] : null;
+      e.sender.send('select-file', filePath);
+    });
+
   });
 
   ipc.on('open-folder', (e) => {
