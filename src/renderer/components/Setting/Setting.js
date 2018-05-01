@@ -65,7 +65,7 @@ class Setting extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <List subheader={<ListSubheader>グローバル設定</ListSubheader>}>
+        <List subheader={<ListSubheader>デフォルト設定</ListSubheader>}>
           <ListItem>
             <ListItemIcon>
               <AspectRatio />
