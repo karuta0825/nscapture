@@ -4,7 +4,6 @@ import IconButton from 'material-ui/IconButton';
 import FiberManualRecord from 'material-ui-icons/FiberManualRecord';
 import Stop from 'material-ui-icons/Stop';
 import CaptureSizeSelect from './CaptureSizeSelect';
-import Typography from 'material-ui/Typography';
 import Timer from './Timer';
 import ReactDom from 'react-dom';
 import Mic from '@material-ui/icons/Mic';
