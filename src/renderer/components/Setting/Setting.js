@@ -14,8 +14,9 @@ import AspectRatio from '@material-ui/icons/AspectRatio';
 import Mic from '@material-ui/icons/Mic';
 import FileDownload from '@material-ui/icons/FileDownload';
 import FolderOpen from '@material-ui/icons/FolderOpen';
-import SizeSelect from './SizeSelect';
 import { ipcRenderer as ipc } from 'electron';
+import SizeSelect from './SizeSelect';
+import { getOS } from '../../../utils/Path';
 
 const styles = theme => ({
   root: {
@@ -61,6 +62,26 @@ class Setting extends Component {
     ipc.send('open-folder');
   }
 
+  showMic() {
+    const os = getOS();
+    if ( os === 'darwin' || os === 'linux' ) { return; }
+    retrun (
+        <ListItem>
+          <ListItemIcon>
+            <Mic />
+          </ListItemIcon>
+          <ListItemText primary="録音" />
+          <ListItemSecondaryAction>
+            <Switch
+              onChange={() => {this.handleToggle()}}
+              checked={this.state.checked}
+              color="primary"
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+    );
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -73,19 +94,7 @@ class Setting extends Component {
             <ListItemText primary="解像度" />
           </ListItem>
           <SizeSelect />
-          <ListItem>
-            <ListItemIcon>
-              <Mic />
-            </ListItemIcon>
-            <ListItemText primary="録音" />
-            <ListItemSecondaryAction>
-              <Switch
-                onChange={() => {this.handleToggle()}}
-                checked={this.state.checked}
-                color="primary"
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
+          { this.showMic() }
           <ListItem>
             <ListItemIcon>
               <FileDownload />
