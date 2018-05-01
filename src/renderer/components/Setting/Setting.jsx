@@ -64,8 +64,8 @@ class Setting extends Component {
 
   showMic() {
     const os = getOS();
-    if ( os === 'darwin' || os === 'linux' ) { return; }
-    retrun (
+    if ( os !== 'win32' ) { return; }
+    return (
         <ListItem>
           <ListItemIcon>
             <Mic />
