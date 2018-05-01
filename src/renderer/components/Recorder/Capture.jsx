@@ -8,6 +8,7 @@ import Timer from './Timer';
 import ReactDom from 'react-dom';
 import Mic from '@material-ui/icons/Mic';
 import MicOff from '@material-ui/icons/MicOff';
+import { getOS } from '../../../utils/Path';
 
 export default class Capture extends Component {
   constructor(props) {
@@ -37,15 +38,23 @@ export default class Capture extends Component {
     return  <MicOff style={{ fontSize: 20 }} />
   }
 
+  showAudioIcon() {
+    const { isRecord, hasAudioRecord } = this.props;
+    if (getOS() !== 'win32') { return ;}
+    return (
+      <IconButton color="primary" component="span" onClick={hasAudioRecord}>
+        {this.showAudio(hasAudio)}
+      </IconButton>
+    );
+  }
+
   render() {
-    const {isRecord, hasAudio, onClick, changeSize, hasAudioRecord} = this.props;
+    const { isRecord, hasAudio, onClick, changeSize } = this.props;
     return (
       <div id={styles.wrapper}>
         <div className={styles.header}>
           <CaptureSizeSelect changeSize={changeSize} />
-          <IconButton color="primary" component="span" onClick={hasAudioRecord}>
-            {this.showAudio(hasAudio)}
-          </IconButton>
+          {this.showAudioIcon()}
         </div>
         <div className={styles.body}>
           <video ref='player' className={styles.body__video} autoPlay muted></video>
