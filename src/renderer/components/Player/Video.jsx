@@ -51,11 +51,11 @@ export default class Video extends Component {
     if (src) { return; }
     return (
       <div className={styles.description}>
-        <Typography variant='body2'>
-          <p>左の動画一覧から動画を選択してください</p>
-          <p>任意の動画を再生するには、</p>
-          <p>右上の開くボタンをクリックするか</p>
-          <p>ここにファイルをドラッグ&ドロップしてください</p>
+        <Typography variant='body2' color='white'>
+          <p className={styles.description__msg}>左の動画一覧から動画を選択してください</p>
+          <p className={styles.description__msg}>任意の動画を再生するには、</p>
+          <p className={styles.description__msg}>右上の開くボタンをクリックするか</p>
+          <p className={styles.description__msg}>ここにファイルをドラッグ&ドロップしてください</p>
         </Typography>
       </div>
     );
