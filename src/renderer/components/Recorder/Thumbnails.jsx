@@ -7,7 +7,7 @@ import Autorenew from 'material-ui-icons/Autorenew';
 export default class Thumbnails extends Component {
 
   render() {
-    const {imgs, selectThumbnail, refreshWindow} = this.props
+    const {imgs, selectThumbnail, refreshWindow, selectedNum} = this.props
     return (
       <div id={styles.list}>
         <div className={styles.header}>
@@ -22,7 +22,7 @@ export default class Thumbnails extends Component {
           {
             imgs.map((item,idx) => {
               return (
-                <div className={styles.item} onClick={() => { selectThumbnail(item)}}>
+                <div className={ (selectedNum === idx) ? styles.item_selected : styles.item} onClick={() => { selectThumbnail(item, idx)}}>
                   <img className={styles.item__img} src={item.thumbnail.toDataURL()} />
                   <div className={styles.item__name}>
                     <Typography variant='body2'>{item.name}</Typography>

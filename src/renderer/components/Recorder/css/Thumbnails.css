@@ -40,7 +40,22 @@
   border-radius: 3px;
   border: 0.1px solid #d6d6d6;
   background: #fff;
+  cursor: pointer;
+}
 
+.item_selected {
+  display: flex;
+  margin:5px;
+  min-height: 70px;
+  align-items: center;
+  border-radius: 3px;
+  border: 2px solid #6c7dda;
+  background: #fff;
+  cursor: pointer;
+}
+
+.item:hover, .item_selected:hover {
+  background: #f1f1f1;
 }
 
 .item__img {
