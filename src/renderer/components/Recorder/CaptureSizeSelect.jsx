@@ -21,32 +21,24 @@ const styles = theme => ({
 class CaptureSizeSelect extends React.Component {
   constructor(props) {
     super(props);
-    const defaultSize = localStorage.getItem('size');
-    this.state = {
-      size : defaultSize || '1280x720',
-    };
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
     const { changeSize } = this.props;
     const [width, height] = event.target.value.split('x');
-    this.setState({ [event.target.name]: event.target.value });
     changeSize(width, height);
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, size } = this.props;
 
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl className={classes.formControl}>
           <Select
-            value={this.state.size}
+            value={size}
             onChange={this.handleChange}
-            inputProps={{
-              name: 'size',
-            }}
           >
           {
             Object.keys(sizeList).map((v,k) => {

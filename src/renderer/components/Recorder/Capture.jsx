@@ -49,11 +49,11 @@ export default class Capture extends Component {
   }
 
   render() {
-    const { isRecord, hasAudio, onClick, changeSize } = this.props;
+    const { isRecord, size, hasAudio, onClick, changeSize } = this.props;
     return (
       <div id={styles.wrapper}>
         <div className={styles.header}>
-          <CaptureSizeSelect changeSize={changeSize} />
+          <CaptureSizeSelect size={size} changeSize={changeSize} />
           {this.showAudioIcon()}
         </div>
         <div className={styles.body}>

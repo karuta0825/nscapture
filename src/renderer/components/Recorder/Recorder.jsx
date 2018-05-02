@@ -19,6 +19,8 @@ export default class Manager extends Component {
       stream: null,
       isRecord: true,
       hasAudio: hasAudio,
+      size: defaultSize || '1280x720',
+      selectedNum: null,
     }
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recordOrStop = this.recordOrStop.bind(this);
@@ -27,10 +29,17 @@ export default class Manager extends Component {
     this.hasAudioRecord = this.hasAudioRecord.bind(this);
 
     ipc.on('saved-file', (e,path) => {
+      const { stream } = this.state;
       const reader = new FileReader()
       reader.onload = () => {
         const buffer = Buffer.from(reader.result)
         fs.writeFileSync(path, buffer);
+        this.dc.clearStream(stream);
+        this.dc.getStream()
+          .then((newStream) => {
+            this.setRecorder(newStream);
+            this.setState({stream: newStream, isRecord: true});
+          });
       }
       reader.readAsArrayBuffer(this.chunks[0]);
     })
@@ -43,9 +52,7 @@ export default class Manager extends Component {
 
   componentWillUnmount() {
     const {stream, isRecord} = this.state;
-    stream && stream.getTracks().forEach((track)=>{
-      track.stop();
-    })
+    this.dc.clearStream(stream);
     if (!isRecord) { this.recorder.stop() }
     ipc.removeAllListeners('saved-file');
   }
@@ -62,21 +69,18 @@ export default class Manager extends Component {
 
   changeSize(width, height) {
     const {stream} = this.state;
-    stream.getTracks().forEach((track)=>{
-      track.stop();
-    })
+    this.dc.clearStream(stream);
     this.dc.resizeView(width, height)
       .then((newStream) => {
+        const size = `${width}x${height}`;
         this.setRecorder(newStream);
-        this.setState({stream: newStream, isRecord: true});
+        this.setState({stream: newStream, isRecord: true, size: size});
       })
   }
 
   hasAudioRecord() {
     const {stream, hasAudio} = this.state;
-    stream && stream.getTracks().forEach((track)=>{
-      track.stop();
-    })
+    this.dc.clearStream(stream);
     this.dc.toggleAudio(!hasAudio)
       .then((newStream) => {
         this.setRecorder(newStream);
@@ -87,30 +91,29 @@ export default class Manager extends Component {
       });
   }
 
-  selectThumbnail(item) {
+  selectThumbnail(item, order) {
+    const { stream } = this.state;
     const windowId = item.id;
-    this.state.stream.getTracks().forEach((track)=>{
-      track.stop();
-    })
+    this.dc.clearStream(stream);
     this.dc.getStream(windowId)
-      .then((stream) => {
-        this.setRecorder(stream);
-        this.setState({stream: stream, isRecord: true});
+      .then((newStream) => {
+        this.setRecorder(newStream);
+        this.setState({stream: newStream, isRecord: true, selectedNum: order});
       })
   }
 
 
   refreshWindow() {
-    const {stream, hasAudio} = this.state;
-    stream && stream.getTracks().forEach((track)=>{
-      track.stop();
-    })
+    const { stream, hasAudio } = this.state;
+    const [ width, height ] = this.state.size.split('x');
+
+    this.dc.clearStream(stream);
 
     let thumbnails;
     this.dc.getSources()
     .then((list) => {
       thumbnails = list;
-      return this.dc.getStream(list[0].id, hasAudio)
+      return this.dc.getStream(list[0].id, hasAudio, width, height);
     })
     .then((newStream) => {
       this.setRecorder(newStream);
@@ -124,7 +127,7 @@ export default class Manager extends Component {
   }
 
   recordOrStop() {
-    const {isRecord, stream} = this.state;
+    const { isRecord, stream } = this.state;
     const savePath = this.getSavePath();
 
     if (isRecord) {
@@ -133,27 +136,18 @@ export default class Manager extends Component {
       this.setState({isRecord: false})
     }
     else {
-      stream.getTracks().forEach((track)=>{
-        track.stop();
-      });
       this.recorder.stop();
       ipc.send('save-dialog', savePath);
-
-      this.dc.getStream()
-        .then((newStream) => {
-          this.setRecorder(newStream);
-          this.setState({stream: newStream, isRecord: true});
-        })
     }
   }
 
 
   render() {
-    const {thumbnails, stream, isRecord, hasAudio} = this.state;
+    const {thumbnails, stream, size, isRecord, hasAudio, selectedNum} = this.state;
     return (
       <div id={styles.recordView}>
-        <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow}/>
-        <Capture stream={stream} onClick={this.recordOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
+        <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow} selectedNum={selectedNum} />
+        <Capture stream={stream} size={size} onClick={this.recordOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
       </div>
     );
   }
