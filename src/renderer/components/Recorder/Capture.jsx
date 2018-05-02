@@ -31,19 +31,18 @@ export default class Capture extends Component {
     return <Stop className={styles.body__action_svg_stop} />
   }
 
-  showAudio(hasAudio) {
-    if (hasAudio) {
-      return <Mic style={{ fontSize: 20 }}/>
-    }
-    return  <MicOff style={{ fontSize: 20 }} />
-  }
 
   showAudioIcon() {
-    const { isRecord, hasAudioRecord } = this.props;
+    const { isRecord, hasAudio, hasAudioRecord } = this.props;
     if (getOS() !== 'win32') { return ;}
     return (
       <IconButton color="primary" component="span" onClick={hasAudioRecord}>
-        {this.showAudio(hasAudio)}
+      {
+        (hasAudio) ?
+          <Mic style={{ fontSize: 20 }}/>
+        :
+          <MicOff style={{ fontSize: 20 }} />
+      }
       </IconButton>
     );
   }
