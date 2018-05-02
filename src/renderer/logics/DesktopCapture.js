@@ -1,13 +1,13 @@
 import {desktopCapturer} from 'electron'
 
 export default class DesktopCapturer {
-  constructor(minWidth=1280, maxWidth=1280, minHeight=720, maxHeight=720) {
+  constructor(minWidth = 1280, maxWidth = 1280, minHeight = 720, maxHeight = 720, hasAudio = false) {
     this.minWidth = minWidth;
     this.maxWidth = maxWidth;
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
+    this.hasAudio = hasAudio;
     this.windowId;
-    this.hasAudio = false;
   }
 
   getSources() {
@@ -21,9 +21,17 @@ export default class DesktopCapturer {
     });
   }
 
-  getStream(windowId = this.windowId, hasAudio = false) {
+  getStream(windowId = this.windowId, hasAudio = false, width, height) {
     this.windowId = windowId;
     this.hasAudio = hasAudio;
+    if (width) {
+      this.minWidth = width;
+      this.maxWidth = width;
+    }
+    if (height) {
+      this.minHeight = height;
+      this.maxHeight = height;
+    }
     const setting = this.getSetting();
     return navigator.mediaDevices.getUserMedia(setting);
   }
@@ -74,6 +82,12 @@ export default class DesktopCapturer {
   toggleAudio(hasAudio = false) {
     this.hasAudio = hasAudio;
     return this.getStream(this.windowId, this.hasAudio);
+  }
+
+  clearStream(stream) {
+    stream && stream.getTracks().forEach((track)=>{
+      track.stop();
+    });
   }
 
 }
