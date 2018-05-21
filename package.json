@@ -6,7 +6,9 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "electron ./dist/main/main.js",
-    "bld:st": "webpack --mode production && electron ."
+    "bld:st": "webpack --mode production && electron .",
+    "lint": "eslint ./src/renderer/",
+    "lint:fix": "eslint ./src/renderer/components/Recorder/Capture.jsx --fix"
   },
   "keywords": [],
   "author": "",
@@ -39,7 +41,6 @@
     "moment": "^2.22.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2"
   }
 }
