@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import { ipcRenderer as ipc } from 'electron';
+import fs from 'fs';
 import styles from './css/Recorder.css';
 import Thumbnails from './Thumbnails';
 import DesktopCapture from '../../logics/DesktopCapture';
 import Capture from './Capture';
-import { ipcRenderer as ipc } from 'electron';
-import fs from 'fs';
 
 export default class Manager extends Component {
   constructor(props) {
@@ -58,10 +58,13 @@ export default class Manager extends Component {
   }
 
   setRecorder(stream = this.state.stream) {
-    const options = {mimeType: 'video/webm'};
-    const recorder = new MediaRecorder(stream, options);
+    const options = { mimeType: 'video/webm' };
+    let recorder = new MediaRecorder(stream, options);
     recorder.ondataavailable = (e) => {
       this.chunks.push(e.data);
+    };
+    recorder.onstop = () => {
+      recorder = null;
     };
     this.recorder = recorder;
     this.chunks = [];
