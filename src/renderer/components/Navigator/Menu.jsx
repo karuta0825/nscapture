@@ -1,31 +1,43 @@
-import React, { Component } from 'react';
-import styles from './css/Menu.css';
-import { withRouter } from 'react-router-dom'
-import Icon from 'material-ui/Icon';
+// @flow
+import * as React from 'react';
+import { withRouter } from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
 import VideoLibrary from '@material-ui/icons/VideoLibrary';
-import VideoCam from '@material-ui/icons/VideoCam';
+import VideoCam from '@material-ui/icons/Videocam';
 import Build from '@material-ui/icons/Build';
+import styles from './css/Menu.css';
 import { getRootHtmlPath } from '../../../utils/Path';
 
+type PropsType = {
+  history: any
+};
 
-class Menu extends Component {
-  constructor(props) {
+type StatesType = {
+  isRecorder: boolean,
+  isPlayer: boolean,
+  isSetting: boolean
+};
+
+function isSelected(flag: boolean): string {
+  return flag ? styles.iconBtn_selected : styles.iconBtn;
+}
+
+class Menu extends React.Component<PropsType, StatesType> {
+  constructor(props: PropsType) {
     super(props);
     this.state = {
       isRecorder: true,
       isPlayer: false,
       isSetting: false,
-    }
-    this.selectMenu = this.selectMenu.bind(this);
-    this.isSelected = this.isSelected.bind(this);
+    };
+    (this: any).selectMenu = this.selectMenu.bind(this);
   }
 
-  selectMenu(menuName) {
+  selectMenu(menuName: string) {
     const { history } = this.props;
-    switch(menuName) {
+    switch (menuName) {
       case 'recorder':
-        history.push(getRootHtmlPath())
+        history.push(getRootHtmlPath());
         this.setState({
           isRecorder: true,
           isPlayer: false,
@@ -33,7 +45,7 @@ class Menu extends Component {
         });
         break;
       case 'player':
-        history.push('/player')
+        history.push('/player');
         this.setState({
           isRecorder: false,
           isPlayer: true,
@@ -41,15 +53,15 @@ class Menu extends Component {
         });
         break;
       case 'setting':
-        history.push('/setting')
+        history.push('/setting');
         this.setState({
           isRecorder: false,
           isPlayer: false,
           isSetting: true,
-        })
+        });
         break;
       default:
-        history.push(getRootHtmlPath())
+        history.push(getRootHtmlPath());
         this.setState({
           isRecorder: true,
           isPlayer: false,
@@ -59,34 +71,42 @@ class Menu extends Component {
     }
   }
 
-  isSelected(flag) {
-    return flag ? styles.iconBtn_selected : styles.iconBtn;
-  }
-
-  render() {
-    const {isRecorder, isPlayer, isSetting} = this.state;
+  render(): React.Node {
+    const { isRecorder, isPlayer, isSetting } = this.state;
     return (
       <div id={styles.itemWrapper}>
         <div className={styles.item}>
-          <IconButton className={this.isSelected(isRecorder)} color='secondary' onClick={() => {this.selectMenu('recorder')}} >
+          <IconButton
+            className={isSelected(isRecorder)}
+            color="secondary"
+            onClick={() => { this.selectMenu('recorder'); }}
+          >
             <VideoCam />
             <div className={styles.title}>録画</div>
           </IconButton>
         </div>
 
-        <div className={styles.blank}></div>
+        <div className={styles.blank} />
 
         <div className={styles.item}>
-          <IconButton className={this.isSelected(isPlayer)} color="secondary" onClick={() => {this.selectMenu('player')}}>
+          <IconButton
+            className={isSelected(isPlayer)}
+            color="secondary"
+            onClick={() => { this.selectMenu('player'); }}
+          >
             <VideoLibrary />
             <div className={styles.title}>再生</div>
           </IconButton>
         </div>
 
-        <div className={styles.blank}></div>
+        <div className={styles.blank} />
 
         <div className={styles.item}>
-          <IconButton className={this.isSelected(isSetting)} color="secondary" onClick={() => {this.selectMenu('setting')}}>
+          <IconButton
+            className={isSelected(isSetting)}
+            color="secondary"
+            onClick={() => { this.selectMenu('setting'); }}
+          >
             <Build />
             <div className={styles.title}>設定</div>
           </IconButton>

@@ -1,18 +1,33 @@
-import React, { Component } from 'react';
-import styles from './css/Capture.css';
+// @flow
+import * as React from 'react';
 import IconButton from 'material-ui/IconButton';
 import FiberManualRecord from 'material-ui-icons/FiberManualRecord';
 import Stop from 'material-ui-icons/Stop';
-import CaptureSizeSelect from './CaptureSizeSelect';
-import Timer from './Timer';
 import ReactDom from 'react-dom';
 import Mic from '@material-ui/icons/Mic';
 import MicOff from '@material-ui/icons/MicOff';
+import styles from './css/Capture.css';
+import CaptureSizeSelect from './CaptureSizeSelect';
+import Timer from './Timer';
 import { getOS } from '../../../utils/Path';
 
-export default class Capture extends Component {
-  constructor(props) {
+type PropsType = {
+  stream: any,
+  isRecord: boolean,
+  hasAudioRecord: boolean,
+  hasAudio: boolean,
+  size: string,
+  onClick: any,
+  changeSize: any
+};
+
+export default class Capture extends React.Component<PropsType> {
+  constructor(props: PropsType) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.player = ReactDom.findDOMNode(this.refs.player);
   }
 
   componentDidUpdate() {
@@ -20,26 +35,27 @@ export default class Capture extends Component {
     this.player.setAttribute('src', URL.createObjectURL(this.props.stream));
   }
 
-  componentDidMount() {
-    this.player = ReactDom.findDOMNode(this.refs.player);
-  }
+  player: any;
 
-  showSvg(isRecord) {
+  showSvg(isRecord: boolean): React.Node {
     if (isRecord) {
-       return <FiberManualRecord className={styles.body__action_svg_record} />
+      return <FiberManualRecord className={styles.body__action_svg_record} />;
     }
-    return <Stop className={styles.body__action_svg_stop} />
+    return <Stop className={styles.body__action_svg_stop} />;
   }
 
 
-  showAudioIcon() {
-    const { isRecord, hasAudio, hasAudioRecord } = this.props;
-    if (getOS() !== 'win32') { return ;}
+  showAudioIcon(): null | React.Node {
+    const {
+      hasAudio, hasAudioRecord,
+    } = this.props;
+
+    if (getOS() !== 'win32') { return null; }
     return (
       <IconButton color="primary" component="span" onClick={hasAudioRecord}>
-      {
+        {
         (hasAudio) ?
-          <Mic style={{ fontSize: 20 }}/>
+          <Mic style={{ fontSize: 20 }} />
         :
           <MicOff style={{ fontSize: 20 }} />
       }
@@ -47,8 +63,10 @@ export default class Capture extends Component {
     );
   }
 
-  render() {
-    const { isRecord, size, hasAudio, onClick, changeSize } = this.props;
+  render(): React.Node {
+    const {
+      isRecord, size, onClick, changeSize,
+    } = this.props;
     return (
       <div id={styles.wrapper}>
         <div className={styles.header}>
@@ -56,7 +74,12 @@ export default class Capture extends Component {
           {this.showAudioIcon()}
         </div>
         <div className={styles.body}>
-          <video ref='player' className={styles.body__video} autoPlay muted></video>
+          <video
+            ref="player"
+            className={styles.body__video}
+            autoPlay
+            muted
+          />
           <IconButton className={styles.body__action} onClick={onClick}>
             {this.showSvg(isRecord)}
           </IconButton>
