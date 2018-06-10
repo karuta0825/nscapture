@@ -14,7 +14,7 @@ import { getOS } from '../../../utils/Path';
 type PropsType = {
   stream: any,
   isRecord: boolean,
-  hasAudioRecord: boolean,
+  hasAudioRecord: () => {},
   hasAudio: boolean,
   size: string,
   onClick: any,

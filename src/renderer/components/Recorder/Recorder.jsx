@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
 import { ipcRenderer as ipc } from 'electron';
 import fs from 'fs';
 import styles from './css/Recorder.css';
@@ -6,7 +7,7 @@ import Thumbnails from './Thumbnails';
 import DesktopCapture from '../../logics/DesktopCapture';
 import Capture from './Capture';
 
-export default class Manager extends Component {
+export default class Manager extends React.Component {
   constructor(props) {
     super(props);
     const hasAudio = ( localStorage.getItem('hasAudio')  === 'true' );
@@ -28,22 +29,21 @@ export default class Manager extends Component {
     this.changeSize = this.changeSize.bind(this);
     this.hasAudioRecord = this.hasAudioRecord.bind(this);
 
-    ipc.on('saved-file', (e,path) => {
+    ipc.on('saved-file', (e, path) => {
       const { stream } = this.state;
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = () => {
-        const buffer = Buffer.from(reader.result)
+        const buffer = Buffer.from(reader.result);
         fs.writeFileSync(path, buffer);
         this.dc.clearStream(stream);
         this.dc.getStream()
           .then((newStream) => {
             this.setRecorder(newStream);
-            this.setState({stream: newStream, isRecord: true});
+            this.setState({ stream: newStream, isRecord: true });
           });
-      }
-      reader.readAsArrayBuffer(this.chunks[0]);
-    })
-
+      };
+      reader.readAsArrayBuffer(new Blob([this.tmp, ...this.chunks], { type: 'video/webm' }));
+    });
   }
 
   componentWillMount() {
@@ -61,7 +61,16 @@ export default class Manager extends Component {
     const options = { mimeType: 'video/webm' };
     let recorder = new MediaRecorder(stream, options);
     recorder.ondataavailable = (e) => {
-      this.chunks.push(e.data);
+      if (this.chunks.length === 0) {
+        this.tmp = e.data;
+      }
+
+      if (this.chunks.length < 10) {
+        this.chunks.push(e.data);
+      } else {
+        const last29 = this.chunks.slice(1);
+        this.chunks = [...last29, e.data];
+      }
     };
     recorder.onstop = () => {
       recorder = null;
@@ -135,7 +144,7 @@ export default class Manager extends Component {
 
     if (isRecord) {
       this.chunks = [];
-      this.recorder.start();
+      this.recorder.start(500);
       this.setState({isRecord: false})
     }
     else {
@@ -145,12 +154,33 @@ export default class Manager extends Component {
   }
 
 
-  render() {
-    const {thumbnails, stream, size, isRecord, hasAudio, selectedNum} = this.state;
+  render(): React.Node {
+    const {
+      thumbnails,
+      stream,
+      size,
+      isRecord,
+      hasAudio,
+      selectedNum,
+    } = this.state;
+
     return (
       <div id={styles.recordView}>
-        <Thumbnails imgs={thumbnails} selectThumbnail={this.selectThumbnail} refreshWindow={this.refreshWindow} selectedNum={selectedNum} />
-        <Capture stream={stream} size={size} onClick={this.recordOrStop} isRecord={isRecord} hasAudio={hasAudio} changeSize={this.changeSize} hasAudioRecord={this.hasAudioRecord}/>
+        <Thumbnails
+          imgs={thumbnails}
+          selectThumbnail={this.selectThumbnail}
+          refreshWindow={this.refreshWindow}
+          selectedNum={selectedNum}
+        />
+        <Capture
+          stream={stream}
+          size={size}
+          onClick={this.recordOrStop}
+          isRecord={isRecord}
+          hasAudio={hasAudio}
+          changeSize={this.changeSize}
+          hasAudioRecord={this.hasAudioRecord}
+        />
       </div>
     );
   }
