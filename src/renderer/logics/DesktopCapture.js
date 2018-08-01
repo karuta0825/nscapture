@@ -21,7 +21,7 @@ export default class DesktopCapturer {
     });
   }
 
-  getStream(windowId = this.windowId, hasAudio = false, width, height) {
+  getStream(windowId = this.windowId, hasAudio = this.hasAudio, width, height) {
     this.windowId = windowId;
     this.hasAudio = hasAudio;
     if (width) {
