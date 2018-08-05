@@ -42,7 +42,7 @@ export default class Manager extends React.Component {
             this.setState({ stream: newStream, isRecord: true });
           });
       };
-      reader.readAsArrayBuffer(new Blob([this.tmp, ...this.chunks], { type: 'video/webm' }));
+      reader.readAsArrayBuffer(this.chunks[0]);
     });
   }
 
@@ -61,16 +61,7 @@ export default class Manager extends React.Component {
     const options = { mimeType: 'video/webm' };
     let recorder = new MediaRecorder(stream, options);
     recorder.ondataavailable = (e) => {
-      if (this.chunks.length === 0) {
-        this.tmp = e.data;
-      }
-
-      if (this.chunks.length < 10) {
-        this.chunks.push(e.data);
-      } else {
-        const last29 = this.chunks.slice(1);
-        this.chunks = [...last29, e.data];
-      }
+      this.chunks.push(e.data);
     };
     recorder.onstop = () => {
       recorder = null;
@@ -144,7 +135,7 @@ export default class Manager extends React.Component {
 
     if (isRecord) {
       this.chunks = [];
-      this.recorder.start(500);
+      this.recorder.start();
       this.setState({isRecord: false})
     }
     else {
