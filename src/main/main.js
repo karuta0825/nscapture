@@ -47,7 +47,6 @@ app.on('ready', () => {
   });
 
   ipc.on('open-folder', (e) => {
-
     const options = {
       title: '保存先',
       properties: ['openDirectory','createDirectory']
@@ -57,13 +56,16 @@ app.on('ready', () => {
       const path = directoryPaths ? directoryPaths[0] : '未設定'
       e.sender.send('select-folder', path);
     });
-
   })
 
   // デベロッパーツールの起動
   mainWindow.webContents.openDevTools();
 
   // mainWindow.setMenu(null);
+  BrowserWindow.addDevToolsExtension(
+    '/Users/takayuki/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.4_0'
+  );
+
 
  // メインウィンドウが閉じられたときの処理
   mainWindow.on('closed', () => {
