@@ -14,7 +14,7 @@ import { getOS } from '../../../utils/Path';
 type PropsType = {
   stream: any,
   isRecord: boolean,
-  hasAudioRecord: boolean,
+  hasAudioRecord: () => {},
   hasAudio: boolean,
   size: string,
   onClick: any,
@@ -22,10 +22,6 @@ type PropsType = {
 };
 
 export default class Capture extends React.Component<PropsType> {
-  constructor(props: PropsType) {
-    super(props);
-  }
-
   componentDidMount() {
     this.player = ReactDom.findDOMNode(this.refs.player);
   }

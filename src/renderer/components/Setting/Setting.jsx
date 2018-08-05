@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// @flow
+import * as React from 'react';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import List, {
@@ -20,32 +20,39 @@ import { getOS } from '../../../utils/Path';
 
 const styles = theme => ({
   root: {
-    flex:1,
+    flex: 1,
     backgroundColor: theme.palette.background.paper,
   },
 });
 
-class Setting extends Component {
+type PropsType = {
+  classes: string
+};
+
+type StatesType = {
+  checked: boolean,
+  savePath: string | null
+};
+
+class Setting extends React.Component<PropsType, StatesType> {
   constructor(props) {
     super(props);
     const savePath = localStorage.getItem('savePath');
-    const hasAudio = ( localStorage.getItem('hasAudio')  === 'true' );
+    const hasAudio = (localStorage.getItem('hasAudio') === 'true');
     this.state = {
       checked: hasAudio,
       savePath: (savePath !== 'null') ? savePath : '保存先: 未設定',
     };
     this.handleToggle = this.handleToggle.bind(this);
 
-    ipc.on('select-folder', (e,path) => {
+    ipc.on('select-folder', (e, path) => {
       if (path === '未設定') {
         localStorage.setItem('savePath', null);
-      }
-      else {
+      } else {
         localStorage.setItem('savePath', path);
       }
-      this.setState({savePath: `保存先: ${path}`})
-    })
-
+      this.setState({ savePath: `保存先: ${path}` });
+    });
   }
 
   componentWillUnmount() {
@@ -55,34 +62,34 @@ class Setting extends Component {
   handleToggle() {
     const { checked } = this.state;
     localStorage.setItem('hasAudio', !checked);
-    this.setState({checked: !checked});
+    this.setState({ checked: !checked });
   }
 
   selectFolder() {
     ipc.send('open-folder');
   }
 
-  showMic() {
+  showMic(): React.Node | null {
     const os = getOS();
-    if ( os !== 'win32' ) { return; }
+    if (os !== 'win32') { return null; }
     return (
-        <ListItem>
-          <ListItemIcon>
-            <Mic />
-          </ListItemIcon>
-          <ListItemText primary="録音" />
-          <ListItemSecondaryAction>
-            <Switch
-              onChange={() => {this.handleToggle()}}
-              checked={this.state.checked}
-              color="primary"
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <Mic />
+        </ListItemIcon>
+        <ListItemText primary="録音" />
+        <ListItemSecondaryAction>
+          <Switch
+            onChange={() => { this.handleToggle(); }}
+            checked={this.state.checked}
+            color="primary"
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
     );
   }
 
-  render() {
+  render(): React.Node {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
@@ -111,9 +118,5 @@ class Setting extends Component {
     );
   }
 }
-
-Setting.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(Setting);

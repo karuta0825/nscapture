@@ -54,12 +54,18 @@ export default class Player extends React.Component<PropsType, StatesType> {
     this.setState({ src: `${searchPath}/${selected.name}`, selectedItemNum: order });
   }
 
-  openFile(src) {
+  openFile(src: string) {
     this.setState({ src, selectedItemNum: null });
   }
 
   render(): React.Node {
-    const { isExpand, files, src, selectedItemNum } = this.state;
+    const {
+      isExpand,
+      files,
+      src,
+      selectedItemNum,
+    } = this.state;
+
     return (
       <div className={styles.wrapper}>
         <PlayList

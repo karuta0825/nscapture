@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Radio, { RadioGroup } from 'material-ui/Radio';
-import { FormLabel, FormControl, FormControlLabel, FormHelperText } from 'material-ui/Form';
-import {sizeList} from '../../constants/Window';
+import { FormControl, FormControlLabel } from 'material-ui/Form';
+import { sizeList } from '../../constants/Window';
 
 const styles = theme => ({
   root: {
@@ -17,13 +17,13 @@ const styles = theme => ({
   },
 });
 
-class RadioButtonsGroup extends Component {
-  constructor(props){
+class RadioButtonsGroup extends React.Component {
+  constructor(props) {
     super(props);
     const defaultSize = localStorage.getItem('size');
     this.state = {
       value: defaultSize || sizeList.HD.join('x'),
-    }
+    };
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -32,7 +32,7 @@ class RadioButtonsGroup extends Component {
     this.setState({ value: event.target.value });
   }
 
-  render() {
+  render(): React.Node {
     const { classes } = this.props;
 
     return (
@@ -45,12 +45,18 @@ class RadioButtonsGroup extends Component {
             value={this.state.value}
             onChange={this.handleChange}
           >
-          {
-            Object.keys(sizeList).map((v,k) => {
-              const value = sizeList[v].join('x');
-              return <FormControlLabel value={value} control={<Radio color='primary' />} label={value} />
-            })
-          }
+            {
+              Object.keys(sizeList).map((v): React.Node => {
+                const value = sizeList[v].join('x');
+                return (
+                  <FormControlLabel
+                    value={value}
+                    control={<Radio color="primary" />}
+                    label={value}
+                  />
+                );
+              })
+            }
           </RadioGroup>
         </FormControl>
       </div>
