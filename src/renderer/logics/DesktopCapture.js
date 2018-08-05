@@ -1,27 +1,48 @@
-import {desktopCapturer} from 'electron'
+// @flow
+import { desktopCapturer } from 'electron';
 
 export default class DesktopCapturer {
-  constructor(minWidth = 1280, maxWidth = 1280, minHeight = 720, maxHeight = 720, hasAudio = false) {
+  windowId: string;
+  minWidth: number;
+  maxWidth: number;
+  minHeight: number;
+  maxHeight: number;
+  hasAudio: boolean;
+  constructor(
+    minWidth: number = 1280,
+    maxWidth: number = 1280,
+    minHeight: number = 720,
+    maxHeight: number = 720,
+    hasAudio: boolean = false,
+  ) {
     this.minWidth = minWidth;
     this.maxWidth = maxWidth;
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
     this.hasAudio = hasAudio;
-    this.windowId;
   }
 
-  getSources() {
-    return new Promise((res,rej) => {
+  getSources(): Promise<Array<{id: string, name: string, thumbnail: Image}>> {
+    return new Promise((res, rej) => {
       desktopCapturer.getSources(
-        {types: ['window', 'screen'], thumbnailSize: {width:50, height:50}},
+        {
+          types: ['window', 'screen'],
+          thumbnailSize: { width: 50, height: 50 },
+        },
         (err, sources) => {
-        if (err) {rej(err);}
-        res(sources)
-      });
+          if (err) { rej(err); }
+          res(sources);
+        },
+      );
     });
   }
 
-  getStream(windowId = this.windowId, hasAudio = this.hasAudio, width, height) {
+  getStream(
+    windowId: string = this.windowId,
+    hasAudio: boolean = this.hasAudio,
+    width: ?number,
+    height: ?number,
+  ): Promise<MediaStream> {
     this.windowId = windowId;
     this.hasAudio = hasAudio;
     if (width) {
@@ -36,7 +57,7 @@ export default class DesktopCapturer {
     return navigator.mediaDevices.getUserMedia(setting);
   }
 
-  resizeView(width, height) {
+  resizeView(width: number, height: number): Promise<MediaStream> {
     this.minWidth = width;
     this.maxWidth = width;
     this.minHeight = height;
@@ -44,13 +65,13 @@ export default class DesktopCapturer {
     return this.getStream();
   }
 
-  getSetting() {
+  getSetting(): any {
     if (this.hasAudio) {
       return {
         audio: {
           mandatory: {
             chromeMediaSource: 'desktop',
-          }
+          },
         },
         video: {
           mandatory: {
@@ -60,8 +81,8 @@ export default class DesktopCapturer {
             maxWidth: this.maxWidth,
             minHeight: this.minHeight,
             maxHeight: this.maxHeight,
-          }
-        }
+          },
+        },
       };
     }
     return {
@@ -74,20 +95,19 @@ export default class DesktopCapturer {
           maxWidth: this.maxWidth,
           minHeight: this.minHeight,
           maxHeight: this.maxHeight,
-        }
-      }
+        },
+      },
     };
   }
 
-  toggleAudio(hasAudio = false) {
+  toggleAudio(hasAudio: boolean = false): Promise<MediaStream> {
     this.hasAudio = hasAudio;
     return this.getStream(this.windowId, this.hasAudio);
   }
 
-  clearStream(stream) {
-    stream && stream.getTracks().forEach((track)=>{
+  clearStream(stream: MediaStream) {
+    stream && stream.getTracks().forEach((track) => {
       track.stop();
     });
   }
-
 }

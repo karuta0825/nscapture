@@ -7,7 +7,9 @@
   ],
   "globals" : {
     "localStorage" : true,
-    "navigator": true
+    "navigator": true,
+    "Image": true,
+    "MediaStream": true
   },
   "rules": {
     "class-methods-use-this": "off",
