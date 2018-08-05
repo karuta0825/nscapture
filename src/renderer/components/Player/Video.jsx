@@ -12,8 +12,8 @@ import styles from './css/Video.css';
 
 type PropsType = {
   isExpand: boolean,
-  toggleExpand: () => {},
-  openFile: (string) => {},
+  toggleExpand: () => void,
+  openFile: (src: string) => void,
   src: string
 };
 
@@ -32,9 +32,9 @@ export default class Video extends React.Component<PropsType> {
     this.player = ReactDom.findDOMNode(this.refs.player);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: PropsType) {
     if (prevProps.src !== this.props.src) {
-      this.player.src =  this.props.src;
+      this.player.src = this.props.src;
       this.player.currentTime = 60 * 60 * 24;
     }
   }
