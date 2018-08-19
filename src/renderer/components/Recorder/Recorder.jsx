@@ -6,23 +6,26 @@ import styles from './css/Recorder.css';
 import Thumbnails from './Thumbnails';
 import DesktopCapture from '../../logics/DesktopCapture';
 import Capture from './Capture';
+import CaptureStream from '../../logics/CaptureStream';
+import StreamConfig from '../../logics/StreamConfig';
+import ManageStream from '../../logics/ManageStream';
 
-export default class Manager extends React.Component {
+export default class Recorder extends React.Component {
+  config: StreamConfig;
+  recorder: MediaRecorder;
   constructor(props) {
     super(props);
-    const hasAudio = ( localStorage.getItem('hasAudio')  === 'true' );
+    const hasAudio = (localStorage.getItem('hasAudio') === 'true');
     const defaultSize = localStorage.getItem('size');
-    this.dc = new DesktopCapture();
-    this.chunks = [];
-    this.recorder = null;
+    this.config = new StreamConfig();
     this.state = {
       thumbnails: [],
       stream: null,
       isRecord: true,
-      hasAudio: hasAudio,
+      hasAudio,
       size: defaultSize || '1280x720',
       selectedNum: null,
-    }
+    };
     this.selectThumbnail = this.selectThumbnail.bind(this);
     this.recordOrStop = this.recordOrStop.bind(this);
     this.refreshWindow = this.refreshWindow.bind(this);
@@ -31,18 +34,17 @@ export default class Manager extends React.Component {
 
     ipc.on('saved-file', (e, path) => {
       const { stream } = this.state;
-      const reader = new FileReader();
+      let reader = new FileReader();
       reader.onload = () => {
         const buffer = Buffer.from(reader.result);
         fs.writeFileSync(path, buffer);
-        this.dc.clearStream(stream);
-        this.dc.getStream()
+        stream.change()
           .then((newStream) => {
-            this.setRecorder(newStream);
             this.setState({ stream: newStream, isRecord: true });
+            reader = null;
           });
       };
-      reader.readAsArrayBuffer(this.chunks[0]);
+      reader.readAsArrayBuffer(stream.chunks[0]);
     });
   }
 
@@ -51,43 +53,32 @@ export default class Manager extends React.Component {
   }
 
   componentWillUnmount() {
-    const {stream, isRecord} = this.state;
-    this.dc.clearStream(stream);
-    if (!isRecord) { this.recorder.stop() }
+    const { stream, isRecord } = this.state;
+    stream.clear();
+    if (!isRecord) { this.recorder.stop(); }
     ipc.removeAllListeners('saved-file');
   }
 
-  setRecorder(stream = this.state.stream) {
-    const options = { mimeType: 'video/webm' };
-    let recorder = new MediaRecorder(stream, options);
-    recorder.ondataavailable = (e) => {
-      this.chunks.push(e.data);
-    };
-    recorder.onstop = () => {
-      recorder = null;
-    };
-    this.recorder = recorder;
-    this.chunks = [];
-  }
-
-  changeSize(width, height) {
-    const {stream} = this.state;
-    this.dc.clearStream(stream);
-    this.dc.resizeView(width, height)
+  changeSize(width: number, height: number) {
+    const { stream } = this.state;
+    stream.change({
+      minWidth: width,
+      maxWidth: width,
+      minHeight: height,
+      maxHeight: height,
+    })
       .then((newStream) => {
         const size = `${width}x${height}`;
-        this.setRecorder(newStream);
-        this.setState({stream: newStream, isRecord: true, size: size});
-      })
+        this.setState({ stream: newStream, isRecord: true, size });
+      });
   }
 
   hasAudioRecord() {
-    const {stream, hasAudio} = this.state;
-    this.dc.clearStream(stream);
-    this.dc.toggleAudio(!hasAudio)
+    const { stream, hasAudio } = this.state;
+
+    stream.change({ hasAudio: !hasAudio })
       .then((newStream) => {
-        this.setRecorder(newStream);
-        this.setState({stream: newStream, isRecord: true, hasAudio: !hasAudio});
+        this.setState({ stream: newStream, isRecord: true, hasAudio: !hasAudio });
       })
       .catch((err) => {
         this.setState({isRecord: true, hasAudio: !hasAudio});
@@ -95,36 +86,36 @@ export default class Manager extends React.Component {
   }
 
   selectThumbnail(item, order) {
-    const { stream } = this.state;
+    const { stream, config } = this.state;
     const windowId = item.id;
-    this.dc.clearStream(stream);
-    this.dc.getStream(windowId)
+    stream.change({ windowId })
       .then((newStream) => {
-        this.setRecorder(newStream);
-        this.setState({stream: newStream, isRecord: true, selectedNum: order});
-      })
+        this.setState({ stream: newStream, isRecord: true, selectedNum: order });
+      });
   }
 
 
   refreshWindow() {
-    const { stream, hasAudio } = this.state;
-    const [ width, height ] = this.state.size.split('x');
-
-    this.dc.clearStream(stream);
-
+    const { stream, hasAudio, size } = this.state;
+    const [width, height] = size.split('x');
     let thumbnails;
-    this.dc.getSources()
-    .then((list) => {
-      thumbnails = list;
-      return this.dc.getStream(list[0].id, hasAudio, width, height);
-    })
-    .then((newStream) => {
-      this.setRecorder(newStream);
-      this.setState({stream: newStream, thumbnails: thumbnails, isRecord: true});
-    })
+
+    if (stream) {
+      stream.clear();
+    }
+
+    ManageStream.getSources()
+      .then((list): Promise<CaptureStream> => {
+        thumbnails = list;
+        this.config.change({ windowId: list[0].id });
+        return ManageStream.getStream(this.config);
+      })
+      .then((newStream) => {
+        this.setState({ stream: newStream, thumbnails, isRecord: true });
+      });
   }
 
-  getSavePath() {
+  getSavePath(): string {
     const localPath = localStorage.getItem('savePath');
     return (localPath !== 'null') ? localPath : '.';
   }
@@ -134,16 +125,14 @@ export default class Manager extends React.Component {
     const savePath = this.getSavePath();
 
     if (isRecord) {
-      this.chunks = [];
-      this.recorder.start();
-      this.setState({isRecord: false})
-    }
-    else {
-      this.recorder.stop();
+      stream.chunks = [];
+      stream.recordStart();
+      this.setState({ isRecord: false });
+    } else {
+      stream.recordStop();
       ipc.send('save-dialog', savePath);
     }
   }
-
 
   render(): React.Node {
     const {
@@ -155,6 +144,8 @@ export default class Manager extends React.Component {
       selectedNum,
     } = this.state;
 
+    const rowStream = stream ? stream.extractStream() : null;
+
     return (
       <div id={styles.recordView}>
         <Thumbnails
@@ -164,7 +155,7 @@ export default class Manager extends React.Component {
           selectedNum={selectedNum}
         />
         <Capture
-          stream={stream}
+          stream={rowStream}
           size={size}
           onClick={this.recordOrStop}
           isRecord={isRecord}

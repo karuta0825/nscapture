@@ -9,7 +9,8 @@
     "localStorage" : true,
     "navigator": true,
     "Image": true,
-    "MediaStream": true
+    "MediaStream": true,
+    "MediaRecorder": true
   },
   "rules": {
     "class-methods-use-this": "off",
