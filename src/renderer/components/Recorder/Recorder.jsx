@@ -4,7 +4,6 @@ import { ipcRenderer as ipc } from 'electron';
 import fs from 'fs';
 import styles from './css/Recorder.css';
 import Thumbnails from './Thumbnails';
-import DesktopCapture from '../../logics/DesktopCapture';
 import Capture from './Capture';
 import CaptureStream from '../../logics/CaptureStream';
 import StreamConfig from '../../logics/StreamConfig';
