@@ -9,7 +9,7 @@ export default class StreamConfig {
   hasAudio: boolean;
 
   constructor(
-    windowId: string,
+    windowId: string = '',
     minWidth: number = 1280,
     maxWidth: number = 1280,
     minHeight: number = 720,
