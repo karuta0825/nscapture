@@ -59,12 +59,12 @@ app.on('ready', () => {
   })
 
   // デベロッパーツールの起動
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // mainWindow.setMenu(null);
-  BrowserWindow.addDevToolsExtension(
-    '/Users/takayuki/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.4_0'
-  );
+  // BrowserWindow.addDevToolsExtension(
+  //   '/Users/takayuki/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.4_0'
+  // );
 
 
  // メインウィンドウが閉じられたときの処理

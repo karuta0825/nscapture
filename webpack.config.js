@@ -4,6 +4,7 @@ const path = require('path');
 const config = [
   {
     // render
+    mode: 'production',
     entry: './src/main/main.js',
     output: {
       path: path.resolve(__dirname, 'dist/main'),
@@ -24,6 +25,7 @@ const config = [
   },
   {
     // renderer
+    mode: 'production',
     entry: './src/renderer/renderer.js',
     output: {
       path: path.resolve(__dirname, 'dist/renderer'),
