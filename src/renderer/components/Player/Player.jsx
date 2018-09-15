@@ -4,13 +4,13 @@ import styles from './css/Player.css';
 import PlayList from './PlayList';
 import Video from './Video';
 import { filterVideoFile } from '../../../utils/File';
-import type { SourcesType } from '../../logics/DesktopCapture';
+import type { ImgType } from '../Recorder/Thumbnails';
 
 type PropsType = {};
 
 type StatesType = {
   isExpand: boolean,
-  files: Array<SourcesType>,
+  files: Array<ImgType>,
   src: any,
   selectedItemNum: number | null
 };
