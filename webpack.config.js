@@ -51,7 +51,7 @@ const config = [
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./src/renderer/index.html",
+        template: './src/renderer/index.html',
       }),
     ],
     resolve: {
