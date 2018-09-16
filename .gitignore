@@ -1,6 +1,4 @@
 /node_modules/
-/dist/main
-/dist/renderer/renderer.js
-/dist/renderer/renderer.js.map
+/dist
 /src/tmp
 package-lock.json

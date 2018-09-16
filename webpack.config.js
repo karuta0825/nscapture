@@ -1,4 +1,4 @@
-// const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const config = [
@@ -49,6 +49,11 @@ const config = [
         loader: ['style-loader', 'css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]'],
       }],
     },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: "./src/renderer/index.html",
+      }),
+    ],
     resolve: {
       extensions: ['.js', '.jsx'],
     },
