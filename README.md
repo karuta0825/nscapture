@@ -5,7 +5,7 @@ NsCapture
 electronで作ったキャプチャーソフトです。  
 Reactの勉強を兼ねて、Material-UIやflowを取り入れて作成しました。
 
-![イメージ](https://github.com/karuta0825/nscapture/blob/media/media/nscapture.gif)
+![デモイメージ](https://user-images.githubusercontent.com/9998881/45593820-6c386380-b9c9-11e8-8511-5300c461ca6d.gif)
 
 #### 動作環境
  [x] Windows  
